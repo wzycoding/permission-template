@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 部门信息入参
+ */
 @Data
 public class SysDeptParam {
     private Long id;
