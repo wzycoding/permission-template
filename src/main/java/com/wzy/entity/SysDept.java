@@ -42,9 +42,14 @@ public class SysDept {
     private String operator;
 
     /**
-     * 操作时间
+     * 创建时间
      */
-    private LocalDateTime operatorTime;
+    private LocalDateTime createdTime;
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
 
     /**
      * 操作者的ip

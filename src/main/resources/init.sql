@@ -10,7 +10,8 @@ CREATE TABLE `sys_user` (
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '1为正常状态，0为冻结状态，2为删除状态',
   `remark` varchar(200)  DEFAULT '' COMMENT '备注',
   `operator` varchar(20)  NOT NULL DEFAULT '' COMMENT '操作者',
-  `operator_time` datetime NOT NULL COMMENT '最后一次更新时间',
+  `created_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `operator_ip` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '最后一个更新者ip',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_unique_index` (`username`)
@@ -26,7 +27,8 @@ CREATE TABLE `sys_dept` (
   `seq` int(11) NOT NULL DEFAULT '0' COMMENT '部门在当前层级下的顺序，由小到大',
   `remark` varchar(200) DEFAULT '' COMMENT '备注',
   `operator` varchar(20) NOT NULL DEFAULT '' COMMENT '操作者',
-  `operator_time` datetime NOT NULL COMMENT '最后一次操作时间',
+  `created_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `operator_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新操作者的ip',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;

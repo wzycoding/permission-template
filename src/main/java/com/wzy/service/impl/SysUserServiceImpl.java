@@ -2,20 +2,24 @@ package com.wzy.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.wzy.common.ErrorEnum;
+import com.wzy.common.RequestHolder;
 import com.wzy.dao.SysUserMapper;
 import com.wzy.entity.SysUser;
 import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
 import com.wzy.redis.prefix.support.SysUserPrefix;
 import com.wzy.service.ISysUserService;
+import com.wzy.util.IpUtil;
 import com.wzy.util.MD5Util;
 import com.wzy.util.UUIDUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -67,7 +71,8 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param token token
      */
     private void addCookie(HttpServletResponse response, SysUser sysUser, String token) {
-        redisTemplate.opsForValue().set(SysUserPrefix.tokenPrefix.getPrefix(), JSON.toJSONString(sysUser), SysUserPrefix.tokenPrefix.expireSeconds(), TimeUnit.SECONDS );
+        String realKey = SysUserPrefix.tokenPrefix.getPrefix() + token;
+        stringRedisTemplate.opsForValue().set(realKey, JSON.toJSONString(sysUser), SysUserPrefix.tokenPrefix.expireSeconds(), TimeUnit.SECONDS );
         Cookie cookie = new Cookie("token", token);
         cookie.setMaxAge(SysUserPrefix.TOKEN_EXPIRE_SECOND);
         cookie.setPath("/");
@@ -89,8 +94,17 @@ public class SysUserServiceImpl implements ISysUserService {
         String formPass = param.getPassword();
         String dbPass = MD5Util.formPassToDBPass(formPass, dbSalt);
         param.setPassword(dbPass);
+        param.setSalt(dbSalt);
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(param, sysUser);
+//        sysUser.setOperator(RequestHolder.getCurrentUser().getUsername());
+//        sysUser.setOperatorIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
+//        sysUser.setUpdateTime(LocalDateTime.now());
+
+        sysUser.setOperator("admin");
+        sysUser.setOperatorIp("127.0.0.1");
         //2、保存用户信息
-        sysUserMapper.insertSelective(param);
+        sysUserMapper.insertSelective(sysUser);
     }
 
     /**
@@ -106,12 +120,20 @@ public class SysUserServiceImpl implements ISysUserService {
         SysUser sysUser = sysUserMapper.selectById(param.getId());
 
         //对提交的表单数据进行二次MD5加密
-        String formPass = param.getPassword();
-        //不更新盐值
-        String dbPass = MD5Util.formPassToDBPass(formPass, sysUser.getSalt());
-        param.setPassword(dbPass);
+        if (param.getPassword() != null) {
+            String formPass = param.getPassword();
+            //不更新盐值
+            String dbPass = MD5Util.formPassToDBPass(formPass, sysUser.getSalt());
+            param.setPassword(dbPass);
+        }
+
+        SysUser targetUser = new SysUser();
+        BeanUtils.copyProperties(param, targetUser);
+
+        targetUser.setOperator("admin");
+        targetUser.setOperatorIp("127.0.0.1");
         //更新用户信息
-        sysUserMapper.update(param);
+        sysUserMapper.update(targetUser);
     }
 
     private boolean checkUsernameExist(SysUserParam sysUserParam) {
@@ -128,6 +150,6 @@ public class SysUserServiceImpl implements ISysUserService {
      * 引入Redis服务
      */
     @Resource
-    StringRedisTemplate redisTemplate;
+    StringRedisTemplate stringRedisTemplate;
 
 }

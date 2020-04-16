@@ -34,9 +34,8 @@ public class SysDeptServiceImpl implements ISysDeptService {
 
         //设置层级
         sysDept.setLevel(LevelUtil.calculateLevel(getLevel(sysDeptParam.getParentId()), sysDeptParam.getParentId()));
-        sysDept.setOperator(RequestHolder.getCurrentUser().getUsername());
-        sysDept.setOperatorIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
-        sysDept.setOperatorTime(LocalDateTime.now());
+        sysDept.setOperator("admin");
+        sysDept.setOperatorIp("127.0.0.1");
         //插入数据
         sysDeptMapper.insertSelective(sysDept);
     }

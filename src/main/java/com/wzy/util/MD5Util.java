@@ -57,5 +57,6 @@ public class MD5Util {
      */
     public static void main(String[] args) {
         System.out.println(generateDbSlat(8));
+        System.out.println(inputPassFormPass("admin123"));
     }
 }

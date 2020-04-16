@@ -1,7 +1,7 @@
 package com.wzy.entity;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * 系统用户实体类: 用户->部门
  */
 @Data
-@Builder
+@NoArgsConstructor
 public class SysUser {
     /**
      * 用户id
@@ -63,9 +63,14 @@ public class SysUser {
     private String operator;
 
     /**
-     * 操作时间
+     * 创建时间
      */
-    private LocalDateTime operatorTime;
+    private LocalDateTime createdTime;
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updateTime;
 
     /**
      * 操作者的ip

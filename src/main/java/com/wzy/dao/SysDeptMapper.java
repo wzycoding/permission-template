@@ -7,8 +7,8 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface SysDeptMapper {
-    @Insert(" insert into sys_dept(name, parent_id, level, seq, remark, operator, operator_time, operator_ip)" +
-            " value (#{name}, #{parentId}, #{level}, #{seq}, #{remark}, #{operator}, #{operatorTime}, #{operatorIp})")
+    @Insert(" insert into sys_dept(name, parent_id, level, seq, remark, operator, operator_ip)" +
+            " value (#{name}, #{parentId}, #{level}, #{seq}, #{remark}, #{operator}, #{operatorIp})")
     int insert(SysDept sysDept);
 
     @Insert("<script>" +
@@ -35,9 +35,6 @@ public interface SysDeptMapper {
             "   <if test=\"operator!=null\">" +
             "       operator, " +
             "   </if>" +
-            "   <if test=\"operatorTime!=null\">" +
-            "       operator_time, " +
-            "   </if>" +
             "   <if test=\"operatorIp!=null\">" +
             "       operator_ip, " +
             "   </if>" +
@@ -53,7 +50,7 @@ public interface SysDeptMapper {
             "       #{parentId}, " +
             "   </if>" +
             "   <if test=\"level!=null\">" +
-            "       #{id}, " +
+            "       #{level}, " +
             "   </if>" +
             "   <if test=\"seq!=null\">" +
             "       #{seq}, " +
@@ -63,9 +60,6 @@ public interface SysDeptMapper {
             "   </if>" +
             "   <if test=\"operator!=null\">" +
             "       #{operator}, " +
-            "   </if>" +
-            "   <if test=\"operatorTime!=null\">" +
-            "       #{operatorTime}, " +
             "   </if>" +
             "   <if test=\"operatorIp!=null\">" +
             "       #{operatorIp}, " +

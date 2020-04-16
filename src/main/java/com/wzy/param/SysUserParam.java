@@ -1,9 +1,9 @@
 package com.wzy.param;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -27,7 +27,7 @@ public class SysUserParam {
      * 电话号码
      */
     @NotBlank(message = "电话号码不能为空")
-    @Max(value = 11, message = "电话号码最长不能超过11位")
+    @Length(min = 0, max = 11, message = "电话号码最长不能超过11位")
     private String telephone;
 
     /**

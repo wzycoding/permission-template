@@ -7,10 +7,10 @@ import java.util.UUID;
  */
 public class UUIDUtil {
     /**
-     * 将UUID中的下划线替换成空的字符串
+     * 将UUID中的横线替换成空的字符串
      * @return 处理后的UUID
      */
     public static String uuid() {
-        return UUID.randomUUID().toString().replace("_", "");
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }

@@ -10,7 +10,8 @@ spring:
     url: jdbc:mysql://localhost:3306/permission_template?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
-    host: localhost:6379
+    host: localhost
+    port: 6379
 
 mybatis:
   configuration:
