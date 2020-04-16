@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.wzy.common.ErrorEnum;
 import com.wzy.common.RequestHolder;
 import com.wzy.entity.SysUser;
+import com.wzy.redis.prefix.support.SysUserPrefix;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,13 +18,16 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class LoginHandlerInterceptor implements HandlerInterceptor {
 
+    private static final String TOKEN_KEY_SEPARATOR = "-";
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");
         if (token == null) {
             ErrorEnum.NOT_LOGIN.throwException();
         }
-        SysUser sysUser = JSON.parseObject(redisTemplate.opsForValue().get("token"), SysUser.class);
+        String realKey = SysUserPrefix.tokenPrefix.getPrefix() + TOKEN_KEY_SEPARATOR + token;
+        SysUser sysUser = JSON.parseObject(redisTemplate.opsForValue().get(realKey), SysUser.class);
         if (sysUser == null) {
             ErrorEnum.TOKEN_EXPIRED.throwException();
         }

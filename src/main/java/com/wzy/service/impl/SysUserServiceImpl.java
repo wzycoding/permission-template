@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class SysUserServiceImpl implements ISysUserService {
+
+    private static final String TOKEN_KEY_SEPARATOR = "-";
     /**
      * 盐值的长度
      */
@@ -71,7 +73,7 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param token token
      */
     private void addCookie(HttpServletResponse response, SysUser sysUser, String token) {
-        String realKey = SysUserPrefix.tokenPrefix.getPrefix() + token;
+        String realKey = SysUserPrefix.tokenPrefix.getPrefix() + TOKEN_KEY_SEPARATOR + token;
         stringRedisTemplate.opsForValue().set(realKey, JSON.toJSONString(sysUser), SysUserPrefix.tokenPrefix.expireSeconds(), TimeUnit.SECONDS );
         Cookie cookie = new Cookie("token", token);
         cookie.setMaxAge(SysUserPrefix.TOKEN_EXPIRE_SECOND);

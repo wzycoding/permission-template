@@ -7,7 +7,13 @@ import com.wzy.redis.prefix.BasePrefix;
  */
 public class SysUserPrefix extends BasePrefix {
 
-    public static final int TOKEN_EXPIRE_SECOND = 3600 * 24 * 2;
+    /**
+     * token过期时间
+     */
+    public static final int TOKEN_EXPIRE_SECOND = 60 * 30;
+    /**
+     * token key 前缀
+     */
     public static final String TOKEN_PREFIX = "token";
     /**
      * 调用父类构造函数
