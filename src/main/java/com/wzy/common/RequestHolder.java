@@ -20,6 +20,11 @@ public class RequestHolder {
     private static final ThreadLocal<HttpServletRequest> requestHolder = new ThreadLocal<>();
 
     /**
+     * 保存token信息
+     */
+    private static final ThreadLocal<String> tokenHolder = new ThreadLocal<>();
+
+    /**
      * 添加用户信息到ThreadLocal
      * @param sysUser 用户信息
      */
@@ -36,6 +41,13 @@ public class RequestHolder {
     }
 
     /**
+     * 添加token信息到ThreadLocal
+     * @param token token信息
+     */
+    public static void add(String token) {
+        tokenHolder.set(token);
+    }
+    /**
      * 获取当前用户信息
      * @return 用户信息
      */
@@ -51,9 +63,20 @@ public class RequestHolder {
         return requestHolder.get();
     }
 
+    /**
+     * 获取当前token
+     */
+    public static String getCurrentToken() {
+        return tokenHolder.get();
+    }
+
+    /**
+     * 移除当前线程保存的信息
+     */
     public static void remove() {
         userHolder.remove();
         requestHolder.remove();
+        tokenHolder.remove();
     }
 
 

@@ -138,6 +138,13 @@ public class SysUserServiceImpl implements ISysUserService {
         sysUserMapper.update(targetUser);
     }
 
+    @Override
+    public void logout() {
+        String token = RequestHolder.getCurrentToken();
+        String realKey = SysUserPrefix.tokenPrefix.getPrefix() + TOKEN_KEY_SEPARATOR + token;
+        stringRedisTemplate.delete(realKey);
+    }
+
     private boolean checkUsernameExist(SysUserParam sysUserParam) {
         return sysUserMapper.countByUserName(sysUserParam.getUsername(), sysUserParam.getId()) > 0;
     }

@@ -48,6 +48,15 @@ public class SysUserController {
     }
 
     /**
+     * 用户注销
+     */
+    @PostMapping("/logout")
+    public Result logout() {
+        sysUserService.logout();
+        return Result.success();
+    }
+
+    /**
      * 引入用户Service
      */
     @Resource

@@ -29,4 +29,9 @@ public interface ISysUserService {
      */
     void update(SysUserParam param);
 
+    /**
+     * 用户退出登录
+     */
+    void logout();
+
 }
