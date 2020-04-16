@@ -1,16 +1,17 @@
-package com.wzy.entity;
+package com.wzy.param;
 
-import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
- * 系统用户实体类: 用户->部门
+ * 系统用户入参
  */
 @Data
-@Builder
-public class SysUser {
+public class SysUserParam {
     /**
      * 用户id
      */
@@ -19,11 +20,14 @@ public class SysUser {
     /**
      * 用户名称
      */
+    @NotBlank(message = "用户名不能为空")
     private String username;
 
     /**
      * 电话号码
      */
+    @NotBlank(message = "电话号码不能为空")
+    @Max(value = 11, message = "电话号码最长不能超过11位")
     private String telephone;
 
     /**
@@ -34,16 +38,20 @@ public class SysUser {
     /**
      * 邮箱地址
      */
+    @NotBlank(message = "邮箱地址不能为空")
+    @Email(message = "请输入正确的email格式")
     private String mail;
 
     /**
      * 用户密码
      */
+    @NotBlank(message = "用户密码不能为空")
     private String password;
 
     /**
      * 部门id
      */
+    @NotNull(message = "必须指定用户所属部门")
     private Long deptId;
 
     /**
@@ -56,19 +64,4 @@ public class SysUser {
      */
 
     private String remark;
-
-    /**
-     * 操作者
-     */
-    private String operator;
-
-    /**
-     * 操作时间
-     */
-    private LocalDateTime operatorTime;
-
-    /**
-     * 操作者的ip
-     */
-    private String operatorIp;
 }

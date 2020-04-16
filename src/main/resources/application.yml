@@ -17,4 +17,8 @@ mybatis:
     #开启下划线转驼峰
     map-underscore-to-camel-case: true
 
+logging:
+  level:
+    com.wzy.dao: debug #打印sql
+
 

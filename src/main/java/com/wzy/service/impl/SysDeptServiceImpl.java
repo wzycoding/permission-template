@@ -1,10 +1,12 @@
 package com.wzy.service.impl;
 
 import com.wzy.common.ErrorEnum;
+import com.wzy.common.RequestHolder;
 import com.wzy.dao.SysDeptMapper;
 import com.wzy.entity.SysDept;
 import com.wzy.param.SysDeptParam;
 import com.wzy.service.ISysDeptService;
+import com.wzy.util.IpUtil;
 import com.wzy.util.LevelUtil;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +34,8 @@ public class SysDeptServiceImpl implements ISysDeptService {
 
         //设置层级
         sysDept.setLevel(LevelUtil.calculateLevel(getLevel(sysDeptParam.getParentId()), sysDeptParam.getParentId()));
-        sysDept.setOperator("1");
-        sysDept.setOperatorIp("127.0.0.1");
+        sysDept.setOperator(RequestHolder.getCurrentUser().getUsername());
+        sysDept.setOperatorIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         sysDept.setOperatorTime(LocalDateTime.now());
         //插入数据
         sysDeptMapper.insertSelective(sysDept);
