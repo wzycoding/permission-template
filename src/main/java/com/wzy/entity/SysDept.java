@@ -56,5 +56,14 @@ public class SysDept {
      */
     private String operatorIp;
 
+    /**
+     * 部门状态：1为正常状态，0为冻结状态
+     */
+    private Integer enable;
+
+    /**
+     * 删除状态：1为已删除，0为未删除
+     */
+    private Integer deleted;
 
 }

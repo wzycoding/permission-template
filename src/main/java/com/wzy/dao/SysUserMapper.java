@@ -22,7 +22,6 @@ public interface SysUserMapper {
             "   <if test=\"mail != null\">mail, </if>" +
             "   <if test=\"password != null\">password, </if>" +
             "   <if test=\"deptId != null\">dept_id, </if>" +
-            "   <if test=\"status != null\">status, </if>" +
             "   <if test=\"remark != null\">remark, </if>" +
             "   <if test=\"operator != null\">operator,</if>" +
             "   <if test=\"operatorIp != null\">operator_ip</if>" +
@@ -34,7 +33,6 @@ public interface SysUserMapper {
             "   <if test=\"mail != null\">#{mail}, </if>" +
             "   <if test=\"password != null\">#{password}, </if>" +
             "   <if test=\"deptId != null\">#{deptId}, </if>" +
-            "   <if test=\"status != null\">#{status}, </if>" +
             "   <if test=\"remark != null\">#{remark}, </if>" +
             "   <if test=\"operator != null\">#{operator}, </if>" +
             "   <if test=\"operatorIp != null\">#{operatorIp}, </if>" +
@@ -42,8 +40,8 @@ public interface SysUserMapper {
             "</script>")
     int insertSelective(SysUser sysUser);
 
-    @Insert(" insert into sys_user(username, telephone, salt, mail, password, dept_id, status, remark, operator, operator_ip)" +
-            " values(#{username}, #{telephone}, #{salt}, #{mail}, #{password}, #{deptId}, #{status}, #{remark}, #{operator}, #{operatorIp} ) ")
+    @Insert(" insert into sys_user(username, telephone, salt, mail, password, dept_id, remark, operator, operator_ip)" +
+            " values(#{username}, #{telephone}, #{salt}, #{mail}, #{password}, #{deptId}, #{remark}, #{operator}, #{operatorIp} ) ")
     int insert(SysUserParam sysUserParam);
 
     @Update("<script>" +
@@ -54,7 +52,6 @@ public interface SysUserMapper {
             "       <if test=\"mail != null\">mail = #{mail}, </if>" +
             "       <if test=\"password != null\">password = #{password}, </if>" +
             "       <if test=\"deptId != null\">dept_id = #{deptId}, </if>" +
-            "       <if test=\"status != null\">status = #{status}, </if>" +
             "       <if test=\"remark != null\">remark = #{remark}, </if>" +
             "       <if test=\"operator != null\">operator = #{operator}, </if>" +
             "       updated_time = now(), " +
@@ -78,6 +75,12 @@ public interface SysUserMapper {
     int countByUserName(String username, Long id);
 
     @Select(" select * from sys_user where id = #{id}")
-    SysUser selectById(Long id);
+    SysUser selectById(long id);
+
+
+    @Select(" select count(*) sys_user where dept_id = #{deptId} and deleted = 0")
+    int countByDeptId(long deptId);
+
+
 
 }

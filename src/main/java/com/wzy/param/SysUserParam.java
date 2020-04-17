@@ -54,14 +54,21 @@ public class SysUserParam {
     @NotNull(message = "必须指定用户所属部门")
     private Long deptId;
 
-    /**
-     * 用户状态：1为正常状态，0为冻结状态，2为删除状态
-     */
-    private Integer status;
+
 
     /**
      * 用户备注
      */
 
     private String remark;
+
+    /**
+     * 用户状态：1为正常状态，0为冻结状态
+     */
+    private Integer enable;
+
+    /**
+     * 删除状态：1为已删除，0为未删除
+     */
+    private Integer deleted;
 }

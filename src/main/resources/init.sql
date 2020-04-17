@@ -7,12 +7,13 @@ CREATE TABLE `sys_user` (
   `mail` varchar(50) NOT NULL COMMENT '电子邮箱',
   `password` varchar(40) NOT NULL COMMENT '加密后的密码',
   `dept_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户所在部门id',
-  `status` int(11) NOT NULL DEFAULT '1' COMMENT '1为正常状态，0为冻结状态，2为删除状态',
   `remark` varchar(200)  DEFAULT '' COMMENT '备注',
   `operator` varchar(20)  NOT NULL DEFAULT '' COMMENT '操作者',
   `created_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `operator_ip` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '最后一个更新者ip',
+  `enable` int(11) NOT NULL DEFAULT '1' COMMENT '1为可用状态，0为不可用状态',
+  `deleted` int(11) NOT NULL DEFAULT '0' COMMENT '0为未删除，1删除状态',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username_unique_index` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
@@ -30,5 +31,7 @@ CREATE TABLE `sys_dept` (
   `created_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_time` datetime NOT NULL  DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `operator_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后一次更新操作者的ip',
+  `enable` int(11) NOT NULL DEFAULT '1' COMMENT '1为可用状态，0为不可用状态',
+  `deleted` int(11) NOT NULL DEFAULT '0' COMMENT '0为未删除，1删除状态',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;

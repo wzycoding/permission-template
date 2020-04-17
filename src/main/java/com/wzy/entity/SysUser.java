@@ -47,11 +47,6 @@ public class SysUser {
     private Long deptId;
 
     /**
-     * 用户状态：1为正常状态，0为冻结状态，2为删除状态
-     */
-    private Integer status;
-
-    /**
      * 用户备注
      */
 
@@ -76,4 +71,14 @@ public class SysUser {
      * 操作者的ip
      */
     private String operatorIp;
+
+    /**
+     * 用户状态：1为正常状态，0为冻结状态
+     */
+    private Integer enable;
+
+    /**
+     * 删除状态：1为已删除，0为未删除
+     */
+    private Integer deleted;
 }

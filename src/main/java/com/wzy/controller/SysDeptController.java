@@ -24,6 +24,26 @@ public class SysDeptController {
         return Result.success();
     }
 
+    /**
+     * 更新部门信息
+     */
+    @PostMapping("/update")
+    public Result update(@RequestBody @Valid SysDeptParam param) {
+        sysDeptService.update(param);
+        return Result.success();
+    }
+
+    /**
+     * 删除部门信息
+     */
+    @PostMapping("/remove/{deptId}")
+    public Result remove(@PathVariable("deptId") long deptId) {
+        sysDeptService.remove(deptId);
+        return Result.success();
+    }
+
+
+
 
     @Resource
     private ISysDeptService sysDeptService;

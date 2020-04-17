@@ -4,6 +4,9 @@ import com.wzy.entity.SysDept;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 @Mapper
 public interface SysDeptMapper {
@@ -14,9 +17,6 @@ public interface SysDeptMapper {
     @Insert("<script>" +
             " insert into sys_dept " +
             " <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">" +
-            "   <if test=\"id != null\">" +
-            "       id, " +
-            "   </if> " +
             "   <if test=\"name!=null\"> " +
             "       name," +
             "   </if>" +
@@ -71,6 +71,37 @@ public interface SysDeptMapper {
     @Select(" select * from sys_dept where id = #{deptId}")
     SysDept get(long deptId);
 
+    @Update("<script>" +
+            "   update sys_dept" +
+            "   <set>" +
+            "   <if test=\"name!=null\"> " +
+            "       name = #{name}," +
+            "   </if>" +
+            "   <if test=\"parentId!=null\">" +
+            "       parent_id#{parentId}, " +
+            "   </if>" +
+            "   <if test=\"level!=null\">" +
+            "       level = #{level}, " +
+            "   </if>" +
+            "   <if test=\"seq!=null\">" +
+            "       seq = #{seq}, " +
+            "   </if>" +
+            "   <if test=\"remark!=null\">" +
+            "       remark = #{remark}," +
+            "   </if>" +
+            "   <if test=\"operator!=null\">" +
+            "       operator = #{operator}, " +
+            "   </if>" +
+            "   <if test=\"operatorIp!=null\">" +
+            "       operator_ip = #{operatorIp}, " +
+            "   </if>" +
+            "   updated_time = #{updateTime}," +
+            "   </set>" +
+            "   </trim>" +
+            "" +
+            "</script>")
+    void update(SysDept sysDept);
+
     @Select("<script> " +
             " select count(*) from sys_dept " +
             " where name = #{deptName}" +
@@ -83,4 +114,36 @@ public interface SysDeptMapper {
             " </if> " +
             "</script>")
     int countByNameAndParentId(Long parentId, String deptName, Long id);
+
+
+    /**
+     * ||为连接符，表示为xxx.开头的层级
+     * @param level
+     * @return
+     */
+    @Select(" select * from sys_dept where level like #{level} || '.%'")
+    List<SysDept> getChildDeptListByLevel(String level);
+
+
+    @Update("<script>" +
+            " <foreach collection='sysDeptList' item='sysDept' separator=';'>" +
+            "   update sys_dept" +
+            "       level = #{sysDept.level}," +
+            "       updated_time = #{sysDept.updatedTime}" +
+            "   where id = #{sysDept.id} " +
+            " </foreach>" +
+            "</script>")
+    void batchUpdateLevel(List<SysDept> sysDeptList);
+
+
+    @Update(" update sys_dept set deleted = 1 where dept_id = #{deptId}")
+    void deleteByPrimaryKey(long deptId);
+
+    @Select(" select count(*) from sys_dept where parent_id = #{parentId} and deleted = 0")
+    int countByParentId(long parentId);
+
+    @Select(" select * from sys_dept where deleted = 0")
+    List<SysDept> list();
+
+
 }
