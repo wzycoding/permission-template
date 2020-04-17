@@ -3,10 +3,13 @@ package com.wzy.controller;
 import com.wzy.common.Result;
 import com.wzy.param.SysDeptParam;
 import com.wzy.service.ISysDeptService;
+import com.wzy.service.ISysTreeService;
+import com.wzy.vo.DeptLevelVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 部门controller
@@ -42,9 +45,17 @@ public class SysDeptController {
         return Result.success();
     }
 
+    /**
+     * 生成部门树
+     */
+    @GetMapping("/tree")
+    public Result tree() {
+        List<DeptLevelVO> deptLevelVOS = treeService.deptTree();
+        return Result.success(deptLevelVOS);
+    }
 
-
-
+    @Resource
+    ISysTreeService treeService;
     @Resource
     private ISysDeptService sysDeptService;
 }

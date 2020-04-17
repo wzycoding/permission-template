@@ -74,31 +74,30 @@ public interface SysDeptMapper {
     @Update("<script>" +
             "   update sys_dept" +
             "   <set>" +
-            "   <if test=\"name!=null\"> " +
-            "       name = #{name}," +
-            "   </if>" +
-            "   <if test=\"parentId!=null\">" +
-            "       parent_id#{parentId}, " +
-            "   </if>" +
-            "   <if test=\"level!=null\">" +
-            "       level = #{level}, " +
-            "   </if>" +
-            "   <if test=\"seq!=null\">" +
-            "       seq = #{seq}, " +
-            "   </if>" +
-            "   <if test=\"remark!=null\">" +
-            "       remark = #{remark}," +
-            "   </if>" +
-            "   <if test=\"operator!=null\">" +
-            "       operator = #{operator}, " +
-            "   </if>" +
-            "   <if test=\"operatorIp!=null\">" +
-            "       operator_ip = #{operatorIp}, " +
-            "   </if>" +
-            "   updated_time = #{updateTime}," +
+            "       <if test=\"name!=null\"> " +
+            "           name = #{name}, " +
+            "       </if>" +
+            "       <if test=\"parentId!=null\">" +
+            "           parent_id = #{parentId}, " +
+            "       </if>" +
+            "       <if test=\"level!=null\">" +
+            "           `level` = #{level}, " +
+            "       </if>" +
+            "       <if test=\"seq!=null\">" +
+            "           seq = #{seq}, " +
+            "       </if>" +
+            "       <if test=\"remark!=null\">" +
+            "           remark = #{remark}, " +
+            "       </if>" +
+            "       <if test=\"operator!=null\">" +
+            "           operator = #{operator}, " +
+            "       </if>" +
+            "       <if test=\"operatorIp!=null\">" +
+            "           operator_ip = #{operatorIp}, " +
+            "       </if>" +
+            "           updated_time = now()," +
             "   </set>" +
-            "   </trim>" +
-            "" +
+            "   where id = #{id}" +
             "</script>")
     void update(SysDept sysDept);
 

@@ -86,6 +86,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
         //更新子节点的层级关系
         updateWithChild(before, after);
         //todo:记录更新日志
+        sysDeptMapper.update(after);
 
     }
 
@@ -94,7 +95,6 @@ public class SysDeptServiceImpl implements ISysDeptService {
      * @param before 更新前
      * @param after 更新后
      */
-    @Bean
     private void updateWithChild(SysDept before, SysDept after) {
         String newLevelPrefix = after.getLevel();
         String oldLevelPrefix = before.getLevel();

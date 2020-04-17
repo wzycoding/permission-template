@@ -141,6 +141,7 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public void logout() {
         String token = RequestHolder.getCurrentToken();
+//        String token = "ca2c216837594d049a65cd9f10e7e24e";
         String realKey = SysUserPrefix.tokenPrefix.getPrefix() + TOKEN_KEY_SEPARATOR + token;
         stringRedisTemplate.delete(realKey);
     }

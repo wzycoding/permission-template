@@ -49,7 +49,7 @@ public class SysDept {
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private LocalDateTime updatedTime;
 
     /**
      * 操作者的ip
