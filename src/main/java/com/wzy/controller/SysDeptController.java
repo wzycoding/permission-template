@@ -5,6 +5,7 @@ import com.wzy.param.SysDeptParam;
 import com.wzy.service.ISysDeptService;
 import com.wzy.service.ISysTreeService;
 import com.wzy.vo.DeptLevelVO;
+import com.wzy.vo.SysDeptVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -52,6 +53,15 @@ public class SysDeptController {
     public Result tree() {
         List<DeptLevelVO> deptLevelVOS = treeService.deptTree();
         return Result.success(deptLevelVOS);
+    }
+
+    /**
+     * 获取部门详情
+     */
+    @GetMapping("/detail/{deptId}")
+    public Result detail(@PathVariable("deptId")long deptId) {
+        SysDeptVO sysDeptVO = sysDeptService.getById(deptId);
+        return Result.success(sysDeptVO);
     }
 
     @Resource

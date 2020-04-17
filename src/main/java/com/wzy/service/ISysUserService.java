@@ -2,6 +2,7 @@ package com.wzy.service;
 
 import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
+import com.wzy.vo.SysUserVO;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -33,5 +34,12 @@ public interface ISysUserService {
      * 用户退出登录
      */
     void logout();
+
+    /**
+     * 根据用户id返回用户详情
+     * @param userId 用户id
+     * @return 用户详情
+     */
+    SysUserVO getById(long userId);
 
 }

@@ -1,6 +1,7 @@
 package com.wzy.service;
 
 import com.wzy.param.SysDeptParam;
+import com.wzy.vo.SysDeptVO;
 
 /**
  * 系统部门service
@@ -23,4 +24,11 @@ public interface ISysDeptService {
      * @param param 入参
      */
     void update(SysDeptParam param);
+
+    /**
+     * 获取部门通过id
+     * @param deptId 部门id
+     */
+    SysDeptVO getById(long deptId);
+
 }

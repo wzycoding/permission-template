@@ -81,6 +81,4 @@ public interface SysUserMapper {
     @Select(" select count(*) sys_user where dept_id = #{deptId} and deleted = 0")
     int countByDeptId(long deptId);
 
-
-
 }

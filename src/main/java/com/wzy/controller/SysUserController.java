@@ -4,10 +4,8 @@ import com.wzy.common.Result;
 import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
 import com.wzy.service.ISysUserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.wzy.vo.SysUserVO;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +52,15 @@ public class SysUserController {
     public Result logout() {
         sysUserService.logout();
         return Result.success();
+    }
+
+    /**
+     * 查询用户信息详情
+     */
+    @GetMapping("/detail/{userId}")
+    public Result detail(@PathVariable("userId") long userId) {
+        SysUserVO sysUserVo = sysUserService.getById(userId);
+        return Result.success(sysUserVo);
     }
 
     /**

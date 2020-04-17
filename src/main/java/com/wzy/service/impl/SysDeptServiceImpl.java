@@ -9,6 +9,7 @@ import com.wzy.param.SysDeptParam;
 import com.wzy.service.ISysDeptService;
 import com.wzy.util.IpUtil;
 import com.wzy.util.LevelUtil;
+import com.wzy.vo.SysDeptVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -88,6 +89,14 @@ public class SysDeptServiceImpl implements ISysDeptService {
         //todo:记录更新日志
         sysDeptMapper.update(after);
 
+    }
+
+    @Override
+    public SysDeptVO getById(long deptId) {
+        SysDept sysDept = sysDeptMapper.get(deptId);
+        SysDeptVO sysDeptVO = new SysDeptVO();
+        BeanUtils.copyProperties(sysDept, sysDeptVO);
+        return sysDeptVO;
     }
 
     /**

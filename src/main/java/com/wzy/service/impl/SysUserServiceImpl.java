@@ -12,6 +12,7 @@ import com.wzy.service.ISysUserService;
 import com.wzy.util.IpUtil;
 import com.wzy.util.MD5Util;
 import com.wzy.util.UUIDUtil;
+import com.wzy.vo.SysUserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -144,6 +145,14 @@ public class SysUserServiceImpl implements ISysUserService {
 //        String token = "ca2c216837594d049a65cd9f10e7e24e";
         String realKey = SysUserPrefix.tokenPrefix.getPrefix() + TOKEN_KEY_SEPARATOR + token;
         stringRedisTemplate.delete(realKey);
+    }
+
+    @Override
+    public SysUserVO getById(long userId) {
+        SysUser sysUser = sysUserMapper.selectById(userId);
+        SysUserVO sysUserVO = new SysUserVO();
+        BeanUtils.copyProperties(sysUser, sysUserVO);
+        return sysUserVO;
     }
 
     private boolean checkUsernameExist(SysUserParam sysUserParam) {
