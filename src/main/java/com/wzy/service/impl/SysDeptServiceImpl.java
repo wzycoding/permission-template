@@ -139,7 +139,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
             ErrorEnum.DEPT_NOT_EXIST.throwException();
         }
         //判断是否存在子部门
-        if (sysDeptMapper.countByParentId(sysDept.getParentId()) > 0) {
+        if (sysDeptMapper.countByParentId(sysDept.getId()) > 0) {
             ErrorEnum.DEPT_EXIST_CHILD.throwException();
         }
         //判断部门下面是否存在用户

@@ -135,7 +135,7 @@ public interface SysDeptMapper {
     void batchUpdateLevel(List<SysDept> sysDeptList);
 
 
-    @Update(" update sys_dept set deleted = 1 where dept_id = #{deptId}")
+    @Update(" update sys_dept set deleted = 1 where id = #{deptId}")
     void deleteByPrimaryKey(long deptId);
 
     @Select(" select count(*) from sys_dept where parent_id = #{parentId} and deleted = 0")
