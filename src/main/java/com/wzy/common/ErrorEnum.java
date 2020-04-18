@@ -13,12 +13,18 @@ public enum ErrorEnum {
     DEPT_NOT_EXIST(20102, "部门不存在"),
     DEPT_EXIST_CHILD(20103, "部门下存在子部门不能删除"),
     DEPT_EXIST_USER(20104, "部门下存在用户不能删除"),
+
     /****************用户错误码*********************/
     USERNAME_OR_PASSWORD_ERROR(20202, "用户名或密码错误"),
     NOT_LOGIN(20203, "您未登录"),
     TOKEN_EXPIRED(20204, "登录信息已过期，请重新登录"),
-    REPEAT_USERNAME(20205, "用户名已存在");
+    REPEAT_USERNAME(20205, "用户名已存在"),
 
+    /****************权限模块错误码*********************/
+    ACL_MODULE_NAME_EXIST(20301, "权限模块名称已存在"),
+    ACL_MODULE_NOT_EXIST(20302, "权限模块不存在"),
+    ACL_MODULE_EXIST_CHILD(20303, "权限模块下存在子模块不能删除"),
+    ACL_MODULE_EXIST_ACL(20304, "权限模块下存在权限点不能删除");
 
 
 

@@ -14,10 +14,7 @@ import java.util.List;
 @Data
 public class DeptLevelVO {
 
-    /**
-     * 子元素
-     */
-    private List<DeptLevelVO> children = Lists.newArrayList();
+
     /**
      * id
      */
@@ -57,6 +54,11 @@ public class DeptLevelVO {
      * 更新时间
      */
     private LocalDateTime updateTime;
+
+    /**
+     * 子元素
+     */
+    private List<DeptLevelVO> children = Lists.newArrayList();
 
     /**
      * 完成entity->deptLevelVo转化

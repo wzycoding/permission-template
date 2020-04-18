@@ -3,16 +3,18 @@ package com.wzy.service.impl;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.wzy.dao.SysAclModuleMapper;
 import com.wzy.dao.SysDeptMapper;
+import com.wzy.entity.SysAclModule;
 import com.wzy.entity.SysDept;
 import com.wzy.service.ISysTreeService;
 import com.wzy.util.LevelUtil;
+import com.wzy.vo.AclModuleLevelVO;
 import com.wzy.vo.DeptLevelVO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,6 +37,63 @@ public class SysTreeServiceImpl implements ISysTreeService {
         }
         //3、转成部门树
         return deptToTree(dtoList);
+    }
+
+    @Override
+    public List<AclModuleLevelVO> aclModuleTree() {
+        //1.查出所有的权限模块信息
+        List<SysAclModule> list = sysAclModuleMapper.list();
+
+        List<AclModuleLevelVO> aclModuleVOList = Lists.newArrayList();
+        //2.转化对象
+
+        for (SysAclModule sysAclModule : list) {
+            aclModuleVOList.add(AclModuleLevelVO.convert(sysAclModule));
+        }
+        //3.转成权限模块树
+        return aclModuleToTree(aclModuleVOList);
+    }
+
+    private List<AclModuleLevelVO> aclModuleToTree(List<AclModuleLevelVO> aclModuleVOList) {
+        //如果数据源为空直接返回空集合
+        if (CollectionUtils.isEmpty(aclModuleVOList)) {
+            return Collections.emptyList();
+        }
+
+        Multimap<String, AclModuleLevelVO> aclModuleLevelMap = ArrayListMultimap.create();
+
+        List<AclModuleLevelVO> rootList = Lists.newArrayList();
+
+        for (AclModuleLevelVO aclModuleLevelVO : aclModuleVOList) {
+            aclModuleLevelMap.put(aclModuleLevelVO.getLevel(), aclModuleLevelVO);
+            if (aclModuleLevelVO.getLevel().equals(LevelUtil.ROOT)) {
+                rootList.add(aclModuleLevelVO);
+            }
+        }
+
+        //将根节点List进行排序
+        rootList.sort(aclModuleSeqComparator);
+        transformAclModuleTree(rootList, LevelUtil.ROOT, aclModuleLevelMap);
+        return rootList;
+    }
+
+    /**
+     * 转成权限模块树
+     * @param rootList 根节点list
+     * @param level 层级
+     * @param aclModuleLevelMap 按照level分层的map
+     */
+    private void transformAclModuleTree(List<AclModuleLevelVO> rootList, String level, Multimap<String, AclModuleLevelVO> aclModuleLevelMap) {
+        for (AclModuleLevelVO vo : rootList) {
+            //计算下一个层级
+            String nextLevel = LevelUtil.calculateLevel(level, vo.getId());
+            List<AclModuleLevelVO> childVOList = (List<AclModuleLevelVO>) aclModuleLevelMap.get(nextLevel);
+            if (!CollectionUtils.isEmpty(childVOList)) {
+                childVOList.sort(aclModuleSeqComparator);
+                vo.setChildren(childVOList);
+                transformAclModuleTree(childVOList, nextLevel, aclModuleLevelMap);
+            }
+        }
     }
 
     /**
@@ -63,10 +122,10 @@ public class SysTreeServiceImpl implements ISysTreeService {
         }
 
         //将根节点List，按照seq排序
-        Collections.sort(rootList, deptSeqComparator);
+        rootList.sort(deptSeqComparator);
 
         //递归转树
-        transformDeptTree(deptLevelList, LevelUtil.ROOT, deptLevelMap);
+        transformDeptTree(rootList, LevelUtil.ROOT, deptLevelMap);
         return rootList;
     }
 
@@ -77,9 +136,8 @@ public class SysTreeServiceImpl implements ISysTreeService {
      * @param levelDeptMap 保存部门信息的map
      */
     private void transformDeptTree(List<DeptLevelVO> deptLevelList, String level, Multimap<String, DeptLevelVO> levelDeptMap) {
-        for (int i = 0; i < deptLevelList.size(); i++) {
+        for (DeptLevelVO deptLevelVO : deptLevelList) {
             //遍历该层的每一个元素
-            DeptLevelVO deptLevelVO = deptLevelList.get(i);
             //处理当前层级，最开始是root：0，计算下一个层级
             String nextLevel = LevelUtil.calculateLevel(level, deptLevelVO.getId());
             //找到当前层级下的所有元素
@@ -87,10 +145,11 @@ public class SysTreeServiceImpl implements ISysTreeService {
             //如果子部门不等于空
             if (!CollectionUtils.isEmpty(childDeptList)) {
                 //排序
-                Collections.sort(childDeptList, deptSeqComparator);
+                childDeptList.sort(deptSeqComparator);
                 //设置子部门
                 deptLevelVO.setChildren(childDeptList);
                 //递归生成树
+                transformDeptTree(childDeptList, nextLevel, levelDeptMap);
             }
         }
     }
@@ -98,21 +157,41 @@ public class SysTreeServiceImpl implements ISysTreeService {
     /**
      * 部门的优先级比较器
      */
-    public Comparator<DeptLevelVO> deptSeqComparator= new Comparator<DeptLevelVO>() {
-            @Override
-            public int compare(DeptLevelVO o1, DeptLevelVO o2) {
-                if (o1.getSeq() < o2.getSeq()) {
-                    return 1;
-                }
-                if (o1.getSeq() > o2.getSeq()) {
-                    return -1;
-                } else {
-                    return 0;
-                }
+    private Comparator<DeptLevelVO> deptSeqComparator= new Comparator<DeptLevelVO>() {
+        @Override
+        public int compare(DeptLevelVO o1, DeptLevelVO o2) {
+            if (o1.getSeq() < o2.getSeq()) {
+                return 1;
             }
-        };
+            if (o1.getSeq() > o2.getSeq()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    };
+
+    /**
+     * 权限模块优先级比较器
+     */
+    private Comparator<AclModuleLevelVO> aclModuleSeqComparator = new Comparator<AclModuleLevelVO>() {
+        @Override
+        public int compare(AclModuleLevelVO o1, AclModuleLevelVO o2) {
+            if (o1.getSeq() < o2.getSeq()) {
+                return 1;
+            }
+            if (o1.getSeq() > o2.getSeq()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+    };
 
 
     @Resource
     private SysDeptMapper sysDeptMapper;
+
+    @Resource
+    private SysAclModuleMapper sysAclModuleMapper;
 }

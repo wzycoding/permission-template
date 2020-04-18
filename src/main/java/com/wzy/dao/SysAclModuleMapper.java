@@ -1,10 +1,7 @@
 package com.wzy.dao;
 
 import com.wzy.entity.SysAclModule;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -117,23 +114,25 @@ public interface SysAclModuleMapper {
 
 
     /**
-     * ||为连接符，表示为xxx.开头的层级
+     * ||为连接符，mysql不支持
+     * concat()函数进行连接，表示为xxx.开头的层级
      * @param level
      * @return
      */
-    @Select(" select * from sys_acl_module where level like #{level} || '.%'")
+    @Select(" select * from sys_acl_module where level like CONCAT(#{level}, '.%')")
     List<SysAclModule> getChildAclModuleListByLevel(String level);
 
 
     @Update("<script>" +
-            " <foreach collection='sysAclModuleList' item='sysAclModule' separator=';'>" +
-            "   update sys_acl_module" +
-            "       level = #{sysAclModule.level}," +
-            "       updated_time = #{sysAclModule.updatedTime}" +
-            "   where id = #{sysAclModule.id} " +
+            " <foreach collection='sysAclModuleList' item='sysAclModule' separator=';' close=\";\">" +
+            "  update sys_acl_module" +
+            "  set" +
+            "  level = #{sysAclModule.level}," +
+            "  updated_time = now()" +
+            "  where id = #{sysAclModule.id} " +
             " </foreach>" +
             "</script>")
-    void batchUpdateLevel(List<SysAclModule> sysAclModuleList);
+    void batchUpdateLevel(@Param("sysAclModuleList") List<SysAclModule> sysAclModuleList);
 
 
     @Update(" update sys_acl_module set deleted = 1 where id = #{aclModuleId}")

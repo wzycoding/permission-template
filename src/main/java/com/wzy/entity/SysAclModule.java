@@ -41,7 +41,10 @@ public class SysAclModule {
      * 操作者
      */
     private String operator;
-
+    /**
+     * 操作者的ip
+     */
+    private String operatorIp;
     /**
      * 创建时间
      */
@@ -51,12 +54,6 @@ public class SysAclModule {
      * 更新时间
      */
     private LocalDateTime updatedTime;
-
-    /**
-     * 操作者的ip
-     */
-    private String operatorIp;
-
     /**
      * 权限模块状态：1为正常状态，0为冻结状态
      */

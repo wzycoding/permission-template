@@ -123,7 +123,7 @@ public class SysDeptServiceImpl implements ISysDeptService {
     }
 
     /**
-     * 检查部门名称是否冲突
+     * 检查同一级别下部门名称是否冲突
      */
     private boolean checkExist(SysDeptParam param) {
         return sysDeptMapper.countByNameAndParentId(param.getParentId(), param.getName(), param.getId()) > 0;
