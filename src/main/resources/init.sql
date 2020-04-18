@@ -39,9 +39,9 @@ CREATE TABLE `sys_dept` (
 
 DROP TABLE IF EXISTS `sys_acl_module`;
 CREATE TABLE `sys_acl_module` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '权限模块id',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '权限模块id',
   `name` varchar(20) NOT NULL DEFAULT '' COMMENT '权限模块名称',
-  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '上级权限模块的id',
+  `parent_id` bigint NOT NULL DEFAULT '0' COMMENT '上级权限模块的id',
   `level` varchar(200) NOT NULL DEFAULT '' COMMENT '权限模块层级',
   `seq` int(11) NOT NULL DEFAULT '0' COMMENT '权限模块在当前层级下的顺序，由小到大',
   `remark` varchar(200) DEFAULT '' COMMENT '备注',
@@ -56,10 +56,10 @@ CREATE TABLE `sys_acl_module` (
 
 DROP TABLE IF EXISTS `sys_acl`;
 CREATE TABLE `sys_acl` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '权限id',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '权限id',
   `code` varchar(50) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '权限码',
   `name` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '权限名称',
-  `acl_module_id` int(11) NOT NULL DEFAULT '0' COMMENT '权限所在的权限模块id',
+  `acl_module_id` bigint NOT NULL DEFAULT '0' COMMENT '权限所在的权限模块id',
   `url` varchar(100) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '请求url，可以填写正则表达式',
   `type` int(11) NOT NULL DEFAULT '1' COMMENT '类型，1：菜单， 2. 按钮 3. 其他',
   `seq` int(11) NOT NULL DEFAULT '0' COMMENT '权限在当前模块下的顺序，由小到大',
