@@ -14,7 +14,6 @@ public class SysDeptParam {
     /**
      * 部门的名称
      */
-    @NotBlank(message = "部门名称不能为空")
     private String name;
     /**
      * 父级部门的id
@@ -23,7 +22,6 @@ public class SysDeptParam {
     /**
      * 展示的顺序
      */
-    @NotNull(message = "展示顺序不能为空")
     private Integer seq;
     /**
      * 部门信息的备注

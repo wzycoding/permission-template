@@ -1,10 +1,7 @@
 package com.wzy.dao;
 
 import com.wzy.entity.SysDept;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -120,19 +117,19 @@ public interface SysDeptMapper {
      * @param level
      * @return
      */
-    @Select(" select * from sys_dept where level like #{level} || '.%'")
+    @Select(" select * from sys_dept where level like CONCAT(#{level}, '.%')")
     List<SysDept> getChildDeptListByLevel(String level);
 
 
     @Update("<script>" +
             " <foreach collection='sysDeptList' item='sysDept' separator=';'>" +
-            "   update sys_dept" +
+            "   update sys_dept set  " +
             "       level = #{sysDept.level}," +
             "       updated_time = #{sysDept.updatedTime}" +
             "   where id = #{sysDept.id} " +
             " </foreach>" +
             "</script>")
-    void batchUpdateLevel(List<SysDept> sysDeptList);
+    void batchUpdateLevel(@Param("sysDeptList") List<SysDept> sysDeptList);
 
 
     @Update(" update sys_dept set deleted = 1 where id = #{deptId}")

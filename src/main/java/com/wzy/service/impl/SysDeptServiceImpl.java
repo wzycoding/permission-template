@@ -107,12 +107,13 @@ public class SysDeptServiceImpl implements ISysDeptService {
     private void updateWithChild(SysDept before, SysDept after) {
         String newLevelPrefix = after.getLevel();
         String oldLevelPrefix = before.getLevel();
+        String beforeChildLevel = LevelUtil.calculateLevel(oldLevelPrefix, before.getId());
         if (!newLevelPrefix.equals(oldLevelPrefix)) {
             List<SysDept> deptList = sysDeptMapper.getChildDeptListByLevel(oldLevelPrefix);
             for (SysDept sysDept : deptList) {
                 String level = sysDept.getLevel();
                 //如果是oldLevelPrefix开头的部门
-                if (level.indexOf(oldLevelPrefix) == 0) {
+                if (level.indexOf(beforeChildLevel) == 0) {
                     //0.1.2.3 被0.1 截取就是.2.3,拼接之后就变成：newLevelPrefix + ".2.3"
                     level = newLevelPrefix + level.substring(oldLevelPrefix.length());
                     sysDept.setLevel(level);
