@@ -8,6 +8,7 @@ import com.wzy.vo.SysUserVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -22,8 +23,8 @@ public class SysUserController {
      * 登录接口
      */
     @PostMapping("/login")
-    public Result login(@RequestBody @Valid SysLoginParam param, HttpServletResponse response) {
-        sysUserService.login(param, response);
+    public Result login(@RequestBody @Valid SysLoginParam param, HttpServletRequest request, HttpServletResponse response) {
+        sysUserService.login(param, request, response);
         return Result.success();
     }
 

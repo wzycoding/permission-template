@@ -12,14 +12,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
-//                .excludePathPatterns("/");
+        registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns("/", "/sys/captcha/get", "/sys/user/login");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").
-                allowedOrigins("http://localhost:8080", "http://localhost:8081"). //允许跨域的域名，可以用*表示允许任何域名使用
+                allowedOrigins("*"). //允许跨域的域名，可以用*表示允许任何域名使用
                 allowedMethods("*"). //允许任何方法（post、get等）
                 allowedHeaders("*"). //允许任何请求头
                 allowCredentials(true). //带上cookie信息

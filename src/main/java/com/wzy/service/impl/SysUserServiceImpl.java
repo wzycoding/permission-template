@@ -7,9 +7,9 @@ import com.wzy.dao.SysUserMapper;
 import com.wzy.entity.SysUser;
 import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
+import com.wzy.redis.prefix.support.SysCaptchaPrefix;
 import com.wzy.redis.prefix.support.SysUserPrefix;
 import com.wzy.service.ISysUserService;
-import com.wzy.util.IpUtil;
 import com.wzy.util.MD5Util;
 import com.wzy.util.UUIDUtil;
 import com.wzy.vo.SysUserVO;
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,7 +41,20 @@ public class SysUserServiceImpl implements ISysUserService {
      * @param response response
      */
     @Override
-    public void login(SysLoginParam param, HttpServletResponse response) {
+    public void login(SysLoginParam param, HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        String _code = null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("_code")) {
+                _code = cookie.getValue();
+            }
+        }
+        String verifyCodeRealKey = SysCaptchaPrefix.captcha.getPrefix() + "-" + _code;
+        String verifyCode = stringRedisTemplate.opsForValue().get(verifyCodeRealKey);
+        //如果不相等验证码错误
+        if (!param.getVerifyCode().equals(verifyCode)) {
+            ErrorEnum.VERIFY_CODE_ERROR.throwException();
+        }
         //首先判断用户名和密码是否匹配
         SysUser sysUser = sysUserMapper.selectByUsername(param.getUsername());
         if (sysUser == null) {
@@ -52,10 +65,10 @@ public class SysUserServiceImpl implements ISysUserService {
         String dbPass = sysUser.getPassword();
         //数据库的盐值
         String dbSalt = sysUser.getSalt();
-        //表单提交的密码
-        String inputPass = MD5Util.inputPassFormPass(param.getPassword());
+//        //表单提交的密码
+//        String inputPass = MD5Util.inputPassFormPass(param.getPassword());
         //计算后的密码
-        String calcPass = MD5Util.formPassToDBPass(inputPass, dbSalt);
+        String calcPass = MD5Util.formPassToDBPass(param.getPassword(), dbSalt);
         //如果不匹配抛出异常
         if (!dbPass.equals(calcPass)) {
             //不匹配则直接抛出异常，返回用户名或者密码错误
@@ -79,6 +92,7 @@ public class SysUserServiceImpl implements ISysUserService {
         Cookie cookie = new Cookie("token", token);
         cookie.setMaxAge(SysUserPrefix.TOKEN_EXPIRE_SECOND);
         cookie.setPath("/");
+        cookie.setDomain("localhost");
         response.addCookie(cookie);
     }
 
@@ -170,5 +184,6 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Resource
     StringRedisTemplate stringRedisTemplate;
+
 
 }

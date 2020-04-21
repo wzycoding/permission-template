@@ -4,6 +4,7 @@ import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
 import com.wzy.vo.SysUserVO;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -16,7 +17,7 @@ public interface ISysUserService {
      * @param param 登录入参
      * @param response response
      */
-    void login(SysLoginParam param, HttpServletResponse response);
+    void login(SysLoginParam param, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 保存用户信息
