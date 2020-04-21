@@ -25,7 +25,9 @@ public enum ErrorEnum {
     ACL_MODULE_NAME_EXIST(20301, "权限模块名称已存在"),
     ACL_MODULE_NOT_EXIST(20302, "权限模块不存在"),
     ACL_MODULE_EXIST_CHILD(20303, "权限模块下存在子模块不能删除"),
-    ACL_MODULE_EXIST_ACL(20304, "权限模块下存在权限点不能删除");
+    ACL_MODULE_EXIST_ACL(20304, "权限模块下存在权限点不能删除"),
+
+    ACL_NAME_EXIST(20305, "权限点名称已经存在");
 
 
 

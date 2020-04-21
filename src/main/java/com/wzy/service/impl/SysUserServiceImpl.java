@@ -10,6 +10,7 @@ import com.wzy.param.SysUserParam;
 import com.wzy.redis.prefix.support.SysCaptchaPrefix;
 import com.wzy.redis.prefix.support.SysUserPrefix;
 import com.wzy.service.ISysUserService;
+import com.wzy.util.CookieUtil;
 import com.wzy.util.MD5Util;
 import com.wzy.util.UUIDUtil;
 import com.wzy.vo.SysUserVO;
@@ -42,17 +43,11 @@ public class SysUserServiceImpl implements ISysUserService {
      */
     @Override
     public void login(SysLoginParam param, HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        String _code = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("_code")) {
-                _code = cookie.getValue();
-            }
-        }
+        String _code = CookieUtil.get(request, "_code");
         String verifyCodeRealKey = SysCaptchaPrefix.captcha.getPrefix() + "-" + _code;
         String verifyCode = stringRedisTemplate.opsForValue().get(verifyCodeRealKey);
         //如果不相等验证码错误
-        if (!param.getVerifyCode().equals(verifyCode)) {
+        if (!param.getVerifyCode().equalsIgnoreCase(verifyCode)) {
             ErrorEnum.VERIFY_CODE_ERROR.throwException();
         }
         //首先判断用户名和密码是否匹配

@@ -1,10 +1,13 @@
 package com.wzy.dao;
 
 import com.wzy.entity.SysAcl;
+import com.wzy.vo.SysAclVo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 
 /**
@@ -69,16 +72,22 @@ public interface SysAclMapper {
             "   select count(*) from sys_acl" +
             "   where name = #{aclName} " +
             "   <if test=\"id != null\">" +
-            "       and id != #{id}" +
+            "       and id != #{aclId}" +
             "   </if>" +
             " </script>")
-    int countByAclName(String aclName, Long id);
+    int countByAclName(String aclName, Long aclId);
 
-    @Select(" select * from sys_acl where id = #{id}")
-    SysAcl selectById(long id);
+    @Select(" select * from sys_acl where id = #{aclId}")
+    SysAcl selectById(long aclId);
 
 
     @Select(" select count(*) from sys_acl where acl_module_id = #{aclModuleId} and deleted = 0")
     int countByAclModuleId(long aclModuleId);
+
+    @Update(" update sys_acl set deleted = 1 where id = #{aclId}")
+    int deleteById(long aclId);
+
+    @Select(" select * from sys_acl ")
+    List<SysAclVo> list();
 
 }

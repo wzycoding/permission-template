@@ -1,18 +1,30 @@
 package com.wzy.config;
 
 import com.wzy.interceptor.LoginHandlerInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * SpringMVC配置
+ */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Bean
+    public LoginHandlerInterceptor getLoginHandlerInterceptor() {
+        return new LoginHandlerInterceptor();
+    }
+
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**")
+        registry.addInterceptor(getLoginHandlerInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns("/", "/sys/captcha/get", "/sys/user/login");
     }
 
