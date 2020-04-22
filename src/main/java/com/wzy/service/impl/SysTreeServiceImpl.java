@@ -5,12 +5,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.wzy.dao.SysAclModuleMapper;
 import com.wzy.dao.SysDeptMapper;
+import com.wzy.dao.SysRoleMenuMapper;
 import com.wzy.entity.SysAclModule;
 import com.wzy.entity.SysDept;
 import com.wzy.service.ISysTreeService;
 import com.wzy.util.LevelUtil;
 import com.wzy.vo.AclModuleLevelVO;
 import com.wzy.vo.DeptLevelVO;
+import com.wzy.vo.MenuLevelVO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -52,6 +54,21 @@ public class SysTreeServiceImpl implements ISysTreeService {
         }
         //3.转成权限模块树
         return aclModuleToTree(aclModuleVOList);
+    }
+
+    @Override
+    public List<MenuLevelVO> userMenuTree() {
+        //1.先获取当前用户所有的角色
+
+        //2.获取角色下的所有菜单权限
+
+        //3.对相同菜单id进行去重
+
+        //4.转化为VO对象
+
+        //5.转化成菜单树
+        return null;
+
     }
 
     private List<AclModuleLevelVO> aclModuleToTree(List<AclModuleLevelVO> aclModuleVOList) {
@@ -194,4 +211,7 @@ public class SysTreeServiceImpl implements ISysTreeService {
 
     @Resource
     private SysAclModuleMapper sysAclModuleMapper;
+
+    @Resource
+    private SysRoleMenuMapper sysRoleMenuMapper;
 }

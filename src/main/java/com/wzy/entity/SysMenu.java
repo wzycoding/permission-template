@@ -1,0 +1,77 @@
+package com.wzy.entity;
+
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+/**
+ * 菜单信息实体类
+ */
+@Data
+public class SysMenu {
+    /**
+     * id
+     */
+    private Long id;
+
+    /**
+     * 菜单名称
+     */
+    private String name;
+
+    /**
+     * 菜单url
+     */
+    private String url;
+
+    /**
+     * 统一层级下的优先级
+     */
+    private Integer seq;
+
+    /**
+     * 备注
+     */
+    private String remark;
+
+    /**
+     * 父菜单id
+     */
+    private Long parentId;
+
+    /**
+     * 层级
+     */
+    private String level;
+
+    /**
+     * 操作者
+     */
+    private String operator;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createdTime;
+
+    /**
+     * 更新时间
+     */
+    private LocalDateTime updatedTime;
+
+    /**
+     * 操作者的ip
+     */
+    private String operatorIp;
+
+    /**
+     * 可用状态：1为正常状态，0为冻结状态
+     */
+    private Integer enable;
+
+    /**
+     * 删除状态：1为已删除，0为未删除
+     */
+    private Integer deleted;
+
+}

@@ -2,6 +2,7 @@ package com.wzy.service;
 
 import com.wzy.vo.AclModuleLevelVO;
 import com.wzy.vo.DeptLevelVO;
+import com.wzy.vo.MenuLevelVO;
 
 import java.util.List;
 
@@ -21,4 +22,15 @@ public interface ISysTreeService {
      * @return 权限模块信息
      */
     List<AclModuleLevelVO> aclModuleTree();
+
+
+    /**
+     * 上次当前用户菜单树
+     * @return 用户菜单树
+     */
+    List<MenuLevelVO> userMenuTree();
+
+
+
+
 }
