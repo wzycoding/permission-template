@@ -1,6 +1,7 @@
 package com.wzy.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.wzy.common.ErrorEnum;
 import com.wzy.common.RequestHolder;
 import com.wzy.dao.SysUserMapper;
@@ -70,6 +71,9 @@ public class SysUserServiceImpl implements ISysUserService {
         if (!dbPass.equals(calcPass)) {
             //不匹配则直接抛出异常，返回用户名或者密码错误
             ErrorEnum.USERNAME_OR_PASSWORD_ERROR.throwException();
+        }
+        if (sysUser.getEnable() == 0) {
+            ErrorEnum.USER_FREEZE.throwException();
         }
         //匹配的话直接生成token保存到redis当中，过期时间为30分钟
         //将生成的token通过response对象存放到客户端的cookie当中，下次访问带上token
@@ -168,12 +172,30 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Override
     public List<SysUserVO> list(SysUserQueryParam param) {
-        return sysUserMapper.list(param.getDeptId(), param.getSize(), param.skip());
+        List<SysUser> sysUserList = sysUserMapper.list(param.getDeptId(), param.getSize(), param.skip());
+        List<SysUserVO> userVOList = Lists.newArrayList();
+        for (SysUser sysUser : sysUserList) {
+            SysUserVO vo = new SysUserVO();
+            BeanUtils.copyProperties(sysUser, vo);
+            vo.setEnable(sysUser.getEnable() == 1);
+            userVOList.add(vo);
+        }
+        return userVOList;
     }
 
     @Override
     public int countByDeptId(long deptId) {
         return sysUserMapper.countByDeptId(deptId);
+    }
+
+    @Override
+    public void deleteById(long userId) {
+        sysUserMapper.deleteById(userId);
+    }
+
+    @Override
+    public void updateEnable(long userId, int enable) {
+        sysUserMapper.updateEnable(userId, enable);
     }
 
     private boolean checkUsernameExist(SysUserParam sysUserParam) {

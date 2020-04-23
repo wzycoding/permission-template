@@ -59,4 +59,17 @@ public interface ISysUserService {
      */
     int countByDeptId(long deptId);
 
+    /**
+     * 删除用户信息
+     * @param userId 用户id
+     */
+    void deleteById(long userId);
+
+    /**
+     * 更新用户是否可用状态
+     * @param userId 用户id
+     * @param enable 可用状态
+     */
+    void updateEnable(long userId, int enable);
+
 }

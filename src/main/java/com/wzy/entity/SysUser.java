@@ -22,6 +22,11 @@ public class SysUser {
     private String username;
 
     /**
+     * 真实姓名
+     */
+    private String realName;
+
+    /**
      * 电话号码
      */
     private String telephone;

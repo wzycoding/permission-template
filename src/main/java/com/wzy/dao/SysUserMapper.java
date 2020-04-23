@@ -20,6 +20,7 @@ public interface SysUserMapper {
             " insert into sys_user" +
             " <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">" +
             "   <if test=\"username != null\">username, </if>" +
+            "   <if test=\"realName != null\">real_name, </if>" +
             "   <if test=\"telephone != null\">telephone, </if>" +
             "   <if test=\"salt != null\">salt, </if>" +
             "   <if test=\"mail != null\">mail, </if>" +
@@ -31,6 +32,7 @@ public interface SysUserMapper {
             " </trim>" +
             " <trim prefix=\"values(\" suffix=\")\" suffixOverrides=\",\">" +
             "   <if test=\"username != null\">#{username}, </if>" +
+            "   <if test=\"realName != null\">#{realName}, </if>" +
             "   <if test=\"telephone != null\">#{telephone}, </if>" +
             "   <if test=\"salt != null\">#{salt}, </if>" +
             "   <if test=\"mail != null\">#{mail}, </if>" +
@@ -84,7 +86,13 @@ public interface SysUserMapper {
     @Select(" select count(*) from sys_user where dept_id = #{deptId} and deleted = 0")
     int countByDeptId(long deptId);
 
-    @Select(" select * from sys_user where dept_id = #{deptId} limit #{skip}, #{pageSize}")
-    List<SysUserVO> list(long deptId, int pageSize, int skip);
+    @Select(" select * from sys_user where dept_id = #{deptId} and deleted = 0  limit #{skip}, #{pageSize}")
+    List<SysUser> list(long deptId, int pageSize, int skip);
+
+    @Update(" update sys_user set deleted = 1 where id = #{userId}")
+    int deleteById(long userId);
+
+    @Update(" update sys_user set enable = #{enable} where id = #{userId}")
+    int updateEnable(long userId, int enable);
 
 }

@@ -15,6 +15,11 @@ public class SysUserVO {
     private String username;
 
     /**
+     * 真实姓名
+     */
+    private String realName;
+
+    /**
      * 电话号码
      */
     private String telephone;
@@ -34,5 +39,10 @@ public class SysUserVO {
      */
 
     private String remark;
+
+    /**
+     * 是否可用
+     */
+    private boolean enable;
 
 }

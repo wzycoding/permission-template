@@ -24,6 +24,10 @@ public class SysUserParam {
     private String username;
 
     /**
+     * 真实姓名
+     */
+    private String realName;
+    /**
      * 电话号码
      */
     @NotBlank(message = "电话号码不能为空")
@@ -45,13 +49,13 @@ public class SysUserParam {
     /**
      * 用户密码
      */
-    @NotBlank(message = "用户密码不能为空")
+//    @NotBlank(message = "用户密码不能为空")
     private String password;
 
     /**
      * 部门id
      */
-    @NotNull(message = "必须指定用户所属部门")
+//    @NotNull(message = "必须指定用户所属部门")
     private Long deptId;
 
 

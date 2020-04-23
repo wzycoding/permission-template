@@ -3,6 +3,7 @@ package com.wzy.controller;
 import com.wzy.common.PageResult;
 import com.wzy.common.Result;
 import com.wzy.param.SysLoginParam;
+import com.wzy.param.SysUserEnableParam;
 import com.wzy.param.SysUserParam;
 import com.wzy.param.SysUserQueryParam;
 import com.wzy.service.ISysUserService;
@@ -75,6 +76,24 @@ public class SysUserController {
         List<SysUserVO> userVOList = sysUserService.list(param);
         int total = sysUserService.countByDeptId(param.getDeptId());
         return PageResult.builder().rows(userVOList).total(total).build();
+    }
+
+    /**
+     * 删除用户信息根据用户id
+     */
+    @PostMapping("/remove/{userId}")
+    public Result remove(@PathVariable("userId") long userId) {
+        sysUserService.deleteById(userId);
+        return Result.success();
+    }
+
+    /**
+     * 更新用户可用状态
+     */
+    @PostMapping("/updateEnable")
+    public Result updateEnable(@RequestBody SysUserEnableParam param) {
+        sysUserService.updateEnable(param.getUserId(), param.getEnable());
+        return Result.success();
     }
 
     /**

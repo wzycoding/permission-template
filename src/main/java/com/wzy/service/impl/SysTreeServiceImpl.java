@@ -61,8 +61,14 @@ public class SysTreeServiceImpl implements ISysTreeService {
 
         //1.先获取当前用户所有的角色
         List<Long> roleIds = sysRoleMapper.selectByUserId(userId);
+        if (CollectionUtils.isEmpty(roleIds)) {
+            return Collections.emptyList();
+        }
         //2.获取角色下的所有菜单权限
         List<Long> menuIds = sysRoleMenuMapper.selectByRoleIdList(roleIds);
+        if (CollectionUtils.isEmpty(menuIds)) {
+            return Collections.emptyList();
+        }
         //对菜单id进行去重
         Set<Long> targetMenuIds = Sets.newHashSet();
         targetMenuIds.addAll(menuIds);

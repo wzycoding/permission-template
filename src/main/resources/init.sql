@@ -165,3 +165,6 @@ CREATE TABLE `sys_role` (
   `deleted` int(11) NOT NULL DEFAULT '0' COMMENT '0为未删除，1删除状态',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT '角色表';
+
+alter table sys_user
+    add column real_name varchar(50) not null comment '真实姓名';

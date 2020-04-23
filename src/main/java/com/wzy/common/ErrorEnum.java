@@ -20,6 +20,7 @@ public enum ErrorEnum {
     NOT_LOGIN(20203, "您未登录"),
     TOKEN_EXPIRED(20204, "登录信息已过期，请重新登录"),
     REPEAT_USERNAME(20205, "用户名已存在"),
+    USER_FREEZE(20206, "用户已被冻结，请联系管理员"),
 
     /****************权限模块错误码*********************/
     ACL_MODULE_NAME_EXIST(20301, "权限模块名称已存在"),
