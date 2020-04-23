@@ -5,12 +5,12 @@ import com.wzy.param.SysMenuParam;
 import com.wzy.param.SysRoleMenuParam;
 import com.wzy.service.ISysMenuService;
 import com.wzy.service.ISysRoleMenuService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.wzy.service.ISysTreeService;
+import com.wzy.vo.MenuLevelVO;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 系统菜单controller
@@ -30,10 +30,21 @@ public class SysMenuController {
         return Result.success();
     }
 
+    @GetMapping("/userMenuTree")
+    public Result userMenuTree() {
+        List<MenuLevelVO> menuLevelVOList = sysTreeService.userMenuTree();
+        return Result.success(menuLevelVOList);
+    }
+
+
+
     @Resource
     private ISysMenuService sysMenuService;
 
     @Resource
     private ISysRoleMenuService sysRoleMenuService;
+
+    @Resource
+    private ISysTreeService sysTreeService;
 
 }

@@ -3,6 +3,10 @@ package com.wzy.dao;
 import com.wzy.entity.SysMenu;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface SysMenuMapper {
@@ -73,5 +77,14 @@ public interface SysMenuMapper {
             "   </if>" +
             " </trim>" +
             "</script>")
-    int insertSeletive(SysMenu sysMenu);
+    int insertSelective(SysMenu sysMenu);
+
+
+    @Select("<script>" +
+            " select * from sys_menu where id in " +
+            " <foreach collection='menuIdList' item='menuId' separator=',' open='(' close=\")\">" +
+            "   #{menuId}" +
+            " </foreach>" +
+            "</script>")
+    List<SysMenu> selectByMenuIdList(@Param("menuIdList") List<Long> menuIdList);
 }

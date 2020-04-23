@@ -7,6 +7,7 @@ import com.wzy.dao.SysUserMapper;
 import com.wzy.entity.SysUser;
 import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
+import com.wzy.param.SysUserQueryParam;
 import com.wzy.redis.prefix.support.SysCaptchaPrefix;
 import com.wzy.redis.prefix.support.SysUserPrefix;
 import com.wzy.service.ISysUserService;
@@ -22,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -162,6 +164,16 @@ public class SysUserServiceImpl implements ISysUserService {
         SysUserVO sysUserVO = new SysUserVO();
         BeanUtils.copyProperties(sysUser, sysUserVO);
         return sysUserVO;
+    }
+
+    @Override
+    public List<SysUserVO> list(SysUserQueryParam param) {
+        return sysUserMapper.list(param.getDeptId(), param.getSize(), param.skip());
+    }
+
+    @Override
+    public int countByDeptId(long deptId) {
+        return sysUserMapper.countByDeptId(deptId);
     }
 
     private boolean checkUsernameExist(SysUserParam sysUserParam) {

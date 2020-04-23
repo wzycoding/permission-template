@@ -3,6 +3,9 @@ package com.wzy.dao;
 import com.wzy.entity.SysRole;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface SysRoleMapper {
@@ -57,4 +60,8 @@ public interface SysRoleMapper {
             " </trim>" +
             "</script>")
     int insertSelective(SysRole sysRole);
+
+
+    @Select("select role_id from sys_role_user where user_id = #{userId}")
+    List<Long> selectByUserId(long userId);
 }

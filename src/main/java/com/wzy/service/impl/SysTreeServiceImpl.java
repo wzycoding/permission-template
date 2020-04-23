@@ -3,11 +3,12 @@ package com.wzy.service.impl;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.wzy.dao.SysAclModuleMapper;
-import com.wzy.dao.SysDeptMapper;
-import com.wzy.dao.SysRoleMenuMapper;
+import com.google.common.collect.Sets;
+import com.wzy.common.RequestHolder;
+import com.wzy.dao.*;
 import com.wzy.entity.SysAclModule;
 import com.wzy.entity.SysDept;
+import com.wzy.entity.SysMenu;
 import com.wzy.service.ISysTreeService;
 import com.wzy.util.LevelUtil;
 import com.wzy.vo.AclModuleLevelVO;
@@ -17,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * 转树Service
@@ -58,17 +57,60 @@ public class SysTreeServiceImpl implements ISysTreeService {
 
     @Override
     public List<MenuLevelVO> userMenuTree() {
+        Long userId = RequestHolder.getCurrentUser().getId();
+
         //1.先获取当前用户所有的角色
-
+        List<Long> roleIds = sysRoleMapper.selectByUserId(userId);
         //2.获取角色下的所有菜单权限
-
+        List<Long> menuIds = sysRoleMenuMapper.selectByRoleIdList(roleIds);
+        //对菜单id进行去重
+        Set<Long> targetMenuIds = Sets.newHashSet();
+        targetMenuIds.addAll(menuIds);
         //3.对相同菜单id进行去重
-
+        List<SysMenu> sysMenus = sysMenuMapper.selectByMenuIdList(new ArrayList<>(targetMenuIds));
         //4.转化为VO对象
-
+        List<MenuLevelVO> menuLevelVOList = Lists.newArrayList();
+        for (SysMenu sysMenu : sysMenus) {
+            menuLevelVOList.add(MenuLevelVO.convert(sysMenu));
+        }
         //5.转化成菜单树
-        return null;
+        return userMenuToTree(menuLevelVOList);
 
+    }
+
+    private List<MenuLevelVO> userMenuToTree(List<MenuLevelVO> menuLevelVOList) {
+        //如果数据源为空直接返回空集合
+        if (CollectionUtils.isEmpty(menuLevelVOList)) {
+            return Collections.emptyList();
+        }
+
+        Multimap<String, MenuLevelVO> menuLevelVOMap = ArrayListMultimap.create();
+
+        List<MenuLevelVO> rootList = Lists.newArrayList();
+
+        for (MenuLevelVO vo : menuLevelVOList) {
+            menuLevelVOMap.put(vo.getLevel(), vo);
+            if (vo.getLevel().equals(LevelUtil.ROOT)) {
+                rootList.add(vo);
+            }
+        }
+
+        //todo:将根节点List进行排序
+        transformMenuLevelTree(rootList, LevelUtil.ROOT, menuLevelVOMap);
+        return rootList;
+    }
+
+    private void transformMenuLevelTree(List<MenuLevelVO> rootList, String level, Multimap<String, MenuLevelVO> menuLevelVOMap) {
+        for (MenuLevelVO vo : rootList) {
+            //计算下一个层级
+            String nextLevel = LevelUtil.calculateLevel(level, vo.getId());
+            List<MenuLevelVO> childVOList = (List<MenuLevelVO>) menuLevelVOMap.get(nextLevel);
+            if (!CollectionUtils.isEmpty(childVOList)) {
+                //todo:根据seq排序
+                vo.setChildren(childVOList);
+                transformMenuLevelTree(childVOList, nextLevel, menuLevelVOMap);
+            }
+        }
     }
 
     private List<AclModuleLevelVO> aclModuleToTree(List<AclModuleLevelVO> aclModuleVOList) {
@@ -214,4 +256,10 @@ public class SysTreeServiceImpl implements ISysTreeService {
 
     @Resource
     private SysRoleMenuMapper sysRoleMenuMapper;
+
+    @Resource
+    private SysRoleMapper sysRoleMapper;
+
+    @Resource
+    private SysMenuMapper sysMenuMapper;
 }

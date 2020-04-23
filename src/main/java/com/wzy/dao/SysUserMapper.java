@@ -2,10 +2,13 @@ package com.wzy.dao;
 
 import com.wzy.entity.SysUser;
 import com.wzy.param.SysUserParam;
+import com.wzy.vo.SysUserVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 /**
  * 系统用户DAO
@@ -80,5 +83,8 @@ public interface SysUserMapper {
 
     @Select(" select count(*) from sys_user where dept_id = #{deptId} and deleted = 0")
     int countByDeptId(long deptId);
+
+    @Select(" select * from sys_user where dept_id = #{deptId} limit #{skip}, #{pageSize}")
+    List<SysUserVO> list(long deptId, int pageSize, int skip);
 
 }

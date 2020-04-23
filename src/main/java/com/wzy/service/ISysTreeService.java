@@ -29,8 +29,4 @@ public interface ISysTreeService {
      * @return 用户菜单树
      */
     List<MenuLevelVO> userMenuTree();
-
-
-
-
 }

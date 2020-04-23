@@ -22,7 +22,7 @@ public class DeptLevelVO {
     /**
      * 部门名称
      */
-    private String name;
+    private String label;
     /**
      * 上级部门的id
      */
@@ -68,6 +68,7 @@ public class DeptLevelVO {
     public static DeptLevelVO convert(SysDept sysDept) {
         DeptLevelVO deptLevelVO = new DeptLevelVO();
         BeanUtils.copyProperties(sysDept, deptLevelVO);
+        deptLevelVO.setLabel(sysDept.getName());
         return deptLevelVO;
     }
 }

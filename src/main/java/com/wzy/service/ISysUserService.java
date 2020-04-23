@@ -2,10 +2,12 @@ package com.wzy.service;
 
 import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
+import com.wzy.param.SysUserQueryParam;
 import com.wzy.vo.SysUserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 系统用户service
@@ -42,5 +44,19 @@ public interface ISysUserService {
      * @return 用户详情
      */
     SysUserVO getById(long userId);
+
+    /**
+     * 获取部门下的用户列表
+     * @param param 入参
+     * @return 用户列表
+     */
+    List<SysUserVO> list(SysUserQueryParam param);
+
+    /**
+     * 获取部门下用户总数
+     * @param deptId 部门id
+     * @return 用户总数
+     */
+    int countByDeptId(long deptId);
 
 }

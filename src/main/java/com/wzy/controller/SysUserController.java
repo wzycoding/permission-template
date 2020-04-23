@@ -1,8 +1,10 @@
 package com.wzy.controller;
 
+import com.wzy.common.PageResult;
 import com.wzy.common.Result;
 import com.wzy.param.SysLoginParam;
 import com.wzy.param.SysUserParam;
+import com.wzy.param.SysUserQueryParam;
 import com.wzy.service.ISysUserService;
 import com.wzy.vo.SysUserVO;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 用户登录Controller
@@ -62,6 +65,16 @@ public class SysUserController {
     public Result detail(@PathVariable("userId") long userId) {
         SysUserVO sysUserVo = sysUserService.getById(userId);
         return Result.success(sysUserVo);
+    }
+
+    /**
+     * 返回对应部门的用户列表
+     */
+    @GetMapping("/list")
+    public PageResult list(SysUserQueryParam param) {
+        List<SysUserVO> userVOList = sysUserService.list(param);
+        int total = sysUserService.countByDeptId(param.getDeptId());
+        return PageResult.builder().rows(userVOList).total(total).build();
     }
 
     /**
