@@ -72,4 +72,10 @@ public interface ISysUserService {
      */
     void updateEnable(long userId, int enable);
 
+    /**
+     * 根据部门id和真实姓名查询数量
+     * @return 数量
+     */
+    int countListByDeptId(String realName, long deptId);
+
 }

@@ -74,7 +74,7 @@ public class SysUserController {
     @GetMapping("/list")
     public PageResult list(SysUserQueryParam param) {
         List<SysUserVO> userVOList = sysUserService.list(param);
-        int total = sysUserService.countByDeptId(param.getDeptId());
+        int total = sysUserService.countListByDeptId(param.getRealName(),param.getDeptId());
         return PageResult.builder().rows(userVOList).total(total).build();
     }
 

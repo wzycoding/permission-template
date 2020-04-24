@@ -6,4 +6,6 @@ import lombok.Data;
 @Data
 public class SysUserQueryParam extends PageParam {
     private long deptId;
+
+    private String realName;
 }

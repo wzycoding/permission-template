@@ -86,8 +86,25 @@ public interface SysUserMapper {
     @Select(" select count(*) from sys_user where dept_id = #{deptId} and deleted = 0")
     int countByDeptId(long deptId);
 
-    @Select(" select * from sys_user where dept_id = #{deptId} and deleted = 0  limit #{skip}, #{pageSize}")
-    List<SysUser> list(long deptId, int pageSize, int skip);
+    @Select("<script> " +
+            "   select * from sys_user " +
+            "   where dept_id = #{deptId} and deleted = 0" +
+            "   <if test='realName != null'>" +
+            "       and real_name like '%' #{realName} '%'" +
+            "   </if>" +
+            "  limit #{skip}, #{pageSize}" +
+            "</script>")
+    List<SysUser> list(String realName, long deptId, int pageSize, int skip);
+
+    @Select("<script> " +
+            "   select count(*) " +
+            "   from sys_user " +
+            "   where dept_id = #{deptId} and deleted = 0" +
+            "   <if test='realName != null'>" +
+            "       and real_name like '%' #{realName} '%'" +
+            "   </if>" +
+            "</script>")
+    int countListByDeptId(String realName, long deptId);
 
     @Update(" update sys_user set deleted = 1 where id = #{userId}")
     int deleteById(long userId);

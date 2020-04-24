@@ -172,7 +172,7 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Override
     public List<SysUserVO> list(SysUserQueryParam param) {
-        List<SysUser> sysUserList = sysUserMapper.list(param.getDeptId(), param.getSize(), param.skip());
+        List<SysUser> sysUserList = sysUserMapper.list(param.getRealName(), param.getDeptId(), param.getSize(), param.skip());
         List<SysUserVO> userVOList = Lists.newArrayList();
         for (SysUser sysUser : sysUserList) {
             SysUserVO vo = new SysUserVO();
@@ -196,6 +196,11 @@ public class SysUserServiceImpl implements ISysUserService {
     @Override
     public void updateEnable(long userId, int enable) {
         sysUserMapper.updateEnable(userId, enable);
+    }
+
+    @Override
+    public int countListByDeptId(String realName, long deptId) {
+        return sysUserMapper.countListByDeptId(realName,deptId);
     }
 
     private boolean checkUsernameExist(SysUserParam sysUserParam) {
