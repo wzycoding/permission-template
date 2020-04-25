@@ -4,6 +4,7 @@ import com.wzy.common.ErrorEnum;
 import com.wzy.dao.SysAclMapper;
 import com.wzy.entity.SysAcl;
 import com.wzy.param.SysAclParam;
+import com.wzy.param.SysAclQueryParam;
 import com.wzy.service.ISysAclService;
 import com.wzy.vo.SysAclVo;
 import org.springframework.beans.BeanUtils;
@@ -39,12 +40,12 @@ public class SysAclServiceImpl implements ISysAclService {
         }
         SysAcl sysAcl = SysAcl.builder().build();
         BeanUtils.copyProperties(param, sysAcl);
-        sysAclMapper.insertSelective(sysAcl);
+        sysAclMapper.update(sysAcl);
     }
 
     @Override
-    public List<SysAclVo> list() {
-        return sysAclMapper.list();
+    public List<SysAclVo> list(SysAclQueryParam param) {
+        return sysAclMapper.list(param.getName(), param.getAclModuleId(), param.skip(), param.getSize());
     }
 
     @Override
@@ -58,6 +59,11 @@ public class SysAclServiceImpl implements ISysAclService {
     @Override
     public void deleteById(long aclId) {
         sysAclMapper.deleteById(aclId);
+    }
+
+    @Override
+    public int countList(SysAclQueryParam param) {
+        return sysAclMapper.countList(param.getName(), param.getAclModuleId());
     }
 
 

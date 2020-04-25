@@ -71,7 +71,7 @@ public interface SysAclMapper {
     @Select(" <script> " +
             "   select count(*) from sys_acl" +
             "   where name = #{aclName} " +
-            "   <if test=\"id != null\">" +
+            "   <if test=\"aclId != null\">" +
             "       and id != #{aclId}" +
             "   </if>" +
             " </script>")
@@ -81,13 +81,26 @@ public interface SysAclMapper {
     SysAcl selectById(long aclId);
 
 
-    @Select(" select count(*) from sys_acl where acl_module_id = #{aclModuleId} and deleted = 0")
-    int countByAclModuleId(long aclModuleId);
+    @Select(" <script>" +
+            " select count(*) " +
+            " from sys_acl" +
+            " where " +
+            " deleted = 0" +
+            " <if test='aclModuleId != null'> and acl_module_id = #{aclModuleId} </if>" +
+            " <if test='name != null'> and name like '%' #{name} '%' </if>" +
+            " </script>")
+    int countList(String name, Long aclModuleId);
 
     @Update(" update sys_acl set deleted = 1 where id = #{aclId}")
     int deleteById(long aclId);
 
-    @Select(" select * from sys_acl ")
-    List<SysAclVo> list();
+    @Select("<script>" +
+            " select * from sys_acl " +
+            " where deleted = 0" +
+            " <if test='aclModuleId != null'> and acl_module_id = #{aclModuleId} </if>" +
+            " <if test='name != null'> and name like '%' #{name} '%' </if>" +
+            " limit #{skip}, #{pageSize}" +
+            "</script>")
+    List<SysAclVo> list(String name, Long aclModuleId, int skip, int pageSize);
 
 }

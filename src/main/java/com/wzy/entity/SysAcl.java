@@ -54,6 +54,10 @@ public class SysAcl {
      * 操作者
      */
     private String operator;
+    /**
+     * 操作者的ip
+     */
+    private String operatorIp;
 
     /**
      * 创建时间
@@ -66,11 +70,6 @@ public class SysAcl {
     private LocalDateTime updateTime;
 
     /**
-     * 操作者的ip
-     */
-    private String operatorIp;
-
-    /**
      * 权限状态：1为正常状态，0为冻结状态
      */
     private Integer enable;
@@ -79,4 +78,6 @@ public class SysAcl {
      * 删除状态：1为已删除，0为未删除
      */
     private Integer deleted;
+
+
 }

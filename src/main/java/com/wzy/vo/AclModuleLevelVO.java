@@ -18,7 +18,7 @@ public class AclModuleLevelVO {
     /**
      * 权限模块名称
      */
-    private String name;
+    private String label;
     /**
      * 上级权限模块的id
      */
@@ -49,6 +49,7 @@ public class AclModuleLevelVO {
     public static AclModuleLevelVO convert(SysAclModule sysAclModule) {
         AclModuleLevelVO aclModuleLevelVO = new AclModuleLevelVO();
         BeanUtils.copyProperties(sysAclModule, aclModuleLevelVO);
+        aclModuleLevelVO.setLabel(sysAclModule.getName());
         return aclModuleLevelVO;
     }
 }

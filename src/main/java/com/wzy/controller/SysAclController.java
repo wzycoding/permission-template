@@ -1,7 +1,9 @@
 package com.wzy.controller;
 
+import com.wzy.common.PageResult;
 import com.wzy.common.Result;
 import com.wzy.param.SysAclParam;
+import com.wzy.param.SysAclQueryParam;
 import com.wzy.service.ISysAclService;
 import com.wzy.vo.SysAclVo;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class SysAclController {
      * 新增权限点接口
      */
     @PostMapping("/save")
-    public Result save(SysAclParam param) {
+    public Result save(@RequestBody SysAclParam param) {
         sysAclService.save(param);
         return Result.success();
     }
@@ -29,7 +31,7 @@ public class SysAclController {
      * 更新权限点信息
      */
     @PostMapping("/update")
-    public Result update(SysAclParam param) {
+    public Result update(@RequestBody SysAclParam param) {
         sysAclService.update(param);
         return Result.success();
     }
@@ -56,9 +58,10 @@ public class SysAclController {
      * 获取权限点列表
      */
     @GetMapping("/list")
-    public Result list() {
-        List<SysAclVo> list = sysAclService.list();
-        return Result.success(list);
+    public PageResult list(SysAclQueryParam param) {
+        List<SysAclVo> list = sysAclService.list(param);
+        int total = sysAclService.countList(param);
+        return PageResult.builder().total(total).rows(list).code(0).build();
     }
 
 
