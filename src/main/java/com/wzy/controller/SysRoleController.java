@@ -3,10 +3,7 @@ package com.wzy.controller;
 import com.wzy.common.Result;
 import com.wzy.param.SysRoleParam;
 import com.wzy.service.ISysRoleService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -24,6 +21,14 @@ public class SysRoleController {
     public Result save(@RequestBody SysRoleParam param){
         sysRoleService.insert(param);
         return Result.success();
+    }
+
+    /**
+     * 返回角色列表
+     */
+    @GetMapping("/list")
+    public Result list() {
+        return Result.success(sysRoleService.list());
     }
 
     @Resource

@@ -64,4 +64,7 @@ public interface SysRoleMapper {
 
     @Select("select role_id from sys_role_user where user_id = #{userId}")
     List<Long> selectByUserId(long userId);
+
+    @Select(" select * from sys_role where deleted = 0")
+    List<SysRole> list();
 }
