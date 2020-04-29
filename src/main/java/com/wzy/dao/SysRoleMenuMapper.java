@@ -1,15 +1,12 @@
 package com.wzy.dao;
 
-import com.wzy.entity.SysMenu;
 import com.wzy.entity.SysRoleMenu;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 角色与菜单关系表DAO

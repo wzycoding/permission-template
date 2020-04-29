@@ -42,6 +42,11 @@ public class AclModuleLevelVO {
     private List<AclModuleLevelVO> children = Lists.newArrayList();
 
     /**
+     * 权限点列表
+     */
+    private List<AclVO> aclList = Lists.newArrayList();
+
+    /**
      * 转化对象： SysAclModule->AclModuleLevelVO
      * @param sysAclModule 权限模块对象
      * @return 权限模块视图对象

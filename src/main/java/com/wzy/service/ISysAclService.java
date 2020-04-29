@@ -2,7 +2,7 @@ package com.wzy.service;
 
 import com.wzy.param.SysAclParam;
 import com.wzy.param.SysAclQueryParam;
-import com.wzy.vo.SysAclVo;
+import com.wzy.vo.SysAclVO;
 
 import java.util.List;
 
@@ -27,14 +27,14 @@ public interface ISysAclService {
      * 获取权限点列表
      * @return 权限点列表
      */
-    List<SysAclVo> list(SysAclQueryParam param);
+    List<SysAclVO> list(SysAclQueryParam param);
 
     /**
      * 获取权限点详情
      * @param aclId 权限点id
      * @return 权限点信息
      */
-    SysAclVo getById(long aclId);
+    SysAclVO getById(long aclId);
 
     /**
      * 删除权限点信息通过id

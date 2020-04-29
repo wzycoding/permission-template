@@ -6,7 +6,7 @@ import com.wzy.entity.SysAcl;
 import com.wzy.param.SysAclParam;
 import com.wzy.param.SysAclQueryParam;
 import com.wzy.service.ISysAclService;
-import com.wzy.vo.SysAclVo;
+import com.wzy.vo.SysAclVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -44,14 +44,14 @@ public class SysAclServiceImpl implements ISysAclService {
     }
 
     @Override
-    public List<SysAclVo> list(SysAclQueryParam param) {
+    public List<SysAclVO> list(SysAclQueryParam param) {
         return sysAclMapper.list(param.getName(), param.getAclModuleId(), param.skip(), param.getSize());
     }
 
     @Override
-    public SysAclVo getById(long aclId) {
+    public SysAclVO getById(long aclId) {
         SysAcl sysAcl = sysAclMapper.selectById(aclId);
-        SysAclVo vo = new SysAclVo();
+        SysAclVO vo = new SysAclVO();
         BeanUtils.copyProperties(sysAcl, vo);
         return vo;
     }

@@ -5,7 +5,7 @@ import com.wzy.common.Result;
 import com.wzy.param.SysAclParam;
 import com.wzy.param.SysAclQueryParam;
 import com.wzy.service.ISysAclService;
-import com.wzy.vo.SysAclVo;
+import com.wzy.vo.SysAclVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -50,7 +50,7 @@ public class SysAclController {
      */
     @GetMapping("/detail/{aclId}")
     public Result detail(@PathVariable("aclId") long aclId) {
-        SysAclVo vo = sysAclService.getById(aclId);
+        SysAclVO vo = sysAclService.getById(aclId);
         return Result.success(vo);
     }
 
@@ -59,7 +59,7 @@ public class SysAclController {
      */
     @GetMapping("/list")
     public PageResult list(SysAclQueryParam param) {
-        List<SysAclVo> list = sysAclService.list(param);
+        List<SysAclVO> list = sysAclService.list(param);
         int total = sysAclService.countList(param);
         return PageResult.builder().total(total).rows(list).code(0).build();
     }

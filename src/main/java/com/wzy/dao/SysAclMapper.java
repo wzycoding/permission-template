@@ -1,11 +1,8 @@
 package com.wzy.dao;
 
 import com.wzy.entity.SysAcl;
-import com.wzy.vo.SysAclVo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.wzy.vo.SysAclVO;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -101,6 +98,18 @@ public interface SysAclMapper {
             " <if test='name != null'> and name like '%' #{name} '%' </if>" +
             " limit #{skip}, #{pageSize}" +
             "</script>")
-    List<SysAclVo> list(String name, Long aclModuleId, int skip, int pageSize);
+    List<SysAclVO> list(String name, Long aclModuleId, int skip, int pageSize);
 
+    @Select("<script>" +
+            " select * from sys_acl " +
+            " where id in " +
+            "   <foreach collection='roleIds' separator=',' item='roleId' open='(' close=')'>" +
+            "       #{roleId}" +
+            "   </foreach>" +
+            "</script>")
+    List<SysAcl> getByIdList(@Param("roleIds") List<Long> roleIds);
+
+
+    @Select(" select * from sys_acl where deleted = 0")
+    List<SysAcl> listAll();
 }

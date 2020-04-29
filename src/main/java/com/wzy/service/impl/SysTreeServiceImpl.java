@@ -6,19 +6,21 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.wzy.common.RequestHolder;
 import com.wzy.dao.*;
-import com.wzy.entity.SysAclModule;
-import com.wzy.entity.SysDept;
-import com.wzy.entity.SysMenu;
+import com.wzy.entity.*;
 import com.wzy.service.ISysTreeService;
+import com.wzy.service.SysCoreService;
 import com.wzy.util.LevelUtil;
 import com.wzy.vo.AclModuleLevelVO;
+import com.wzy.vo.AclVO;
 import com.wzy.vo.DeptLevelVO;
 import com.wzy.vo.MenuLevelVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 转树Service
@@ -82,6 +84,88 @@ public class SysTreeServiceImpl implements ISysTreeService {
         //5.转化成菜单树
         return userMenuToTree(menuLevelVOList);
 
+    }
+
+    @Override
+    public List<AclModuleLevelVO> roleAclTree(long roleId) {
+        //1、先获取系统所有权限点信息
+        List<SysAcl> allAclList = sysAclMapper.listAll();
+
+        //2、获取角色的所有权限点id
+        List<Long> roleAclIdList = sysRoleAclMapper.getAclIdListByRoleId(roleId);
+        //3、获取角色权限点信息
+        List<SysAcl> roleAclList = roleAclIdList.stream().map(sysAclMapper::selectById).collect(Collectors.toList());
+
+        //4、获取当前用户的所有权限点
+        List<SysAcl> currentUserAclList = sysCoreService.getCurrentUserAclList();
+
+        //5、获取当前用户已分配的权限id
+        Set<Long> userAclIdSet = currentUserAclList.stream().map(SysAcl::getId).collect(Collectors.toSet());
+
+        //6、获取当前角色的权限id
+        Set<Long> roleAclIdSet = roleAclList.stream().map(SysAcl::getId).collect(Collectors.toSet());
+
+        //7、创建AclVoList
+        List<AclVO> aclVOList = Lists.newArrayList();
+
+        //8、选项转化对象，判断是否被选中
+        for (SysAcl sysAcl : allAclList) {
+            AclVO vo = new AclVO();
+            BeanUtils.copyProperties(sysAcl, vo);
+            //非常重要的步骤！！！
+            //只有当前用户有的权限才能去给其他用户分配
+            if (userAclIdSet.contains(sysAcl.getId())) {
+                //允许分配
+                vo.setHasAcl(true);
+            }
+            //判断当前角色权限点是否选中
+            if (roleAclIdSet.contains(sysAcl.getId())) {
+                //选中权限点
+                vo.setChecked(true);
+            }
+            aclVOList.add(vo);
+        }
+
+        return roleAclToTree(aclVOList);
+    }
+
+    /**
+     * 角色管理下的权限点列表转树
+     * @param aclVOList 权限点列表
+     * @return 权限树形列表
+     */
+    private List<AclModuleLevelVO> roleAclToTree(List<AclVO> aclVOList) {
+        if (CollectionUtils.isEmpty(aclVOList)) {
+            return Lists.newArrayList();
+        }
+        List<AclModuleLevelVO> aclModuleLevelVOList = aclModuleTree();
+
+        Multimap<Long, AclVO> moduleIdAclMap = ArrayListMultimap.create();
+        for (AclVO aclVO : aclVOList) {
+            moduleIdAclMap.put(aclVO.getAclModuleId(), aclVO);
+        }
+        bindAclsWithOrder(aclModuleLevelVOList, moduleIdAclMap);
+        return aclModuleLevelVOList;
+    }
+
+    /**
+     * 为权限模块绑定权限点
+     * @param aclModuleLevelVOList 权限模块树
+     * @param moduleIdAclMap 权限点Map
+     */
+    private void bindAclsWithOrder(List<AclModuleLevelVO> aclModuleLevelVOList, Multimap<Long, AclVO> moduleIdAclMap) {
+        if (CollectionUtils.isEmpty(aclModuleLevelVOList)) {
+            return;
+        }
+
+        for (AclModuleLevelVO vo : aclModuleLevelVOList) {
+            List<AclVO> aclVoList = (List<AclVO>) moduleIdAclMap.get(vo.getId());
+            if (!CollectionUtils.isEmpty(aclVoList)) {
+                //todo: 按照优先级排序
+                vo.setAclList(aclVoList);
+            }
+            bindAclsWithOrder(vo.getChildren(), moduleIdAclMap);
+        }
     }
 
     private List<MenuLevelVO> userMenuToTree(List<MenuLevelVO> menuLevelVOList) {
@@ -268,4 +352,16 @@ public class SysTreeServiceImpl implements ISysTreeService {
 
     @Resource
     private SysMenuMapper sysMenuMapper;
+
+    @Resource
+    private SysRoleUserMapper sysRoleUserMapper;
+
+    @Resource
+    private SysRoleAclMapper sysRoleAclMapper;
+
+    @Resource
+    private SysAclMapper sysAclMapper;
+
+    @Resource
+    private SysCoreService sysCoreService;
 }

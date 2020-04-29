@@ -6,7 +6,7 @@ import lombok.Data;
  * 权限点视图类
  */
 @Data
-public class SysAclVo {
+public class SysAclVO {
     /**
      * id
      */

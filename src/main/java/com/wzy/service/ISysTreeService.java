@@ -25,8 +25,14 @@ public interface ISysTreeService {
 
 
     /**
-     * 上次当前用户菜单树
+     * 生成当前用户菜单树
      * @return 用户菜单树
      */
     List<MenuLevelVO> userMenuTree();
+
+    /**
+     * 根据角色id生成对应的权限树
+     * @return 权限树
+     */
+    List<AclModuleLevelVO> roleAclTree(long roleId);
 }

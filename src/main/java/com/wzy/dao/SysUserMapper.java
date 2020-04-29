@@ -2,7 +2,6 @@ package com.wzy.dao;
 
 import com.wzy.entity.SysUser;
 import com.wzy.param.SysUserParam;
-import com.wzy.vo.SysUserVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -111,5 +110,8 @@ public interface SysUserMapper {
 
     @Update(" update sys_user set enable = #{enable} where id = #{userId}")
     int updateEnable(long userId, int enable);
+
+    @Select(" select * from sys_user where deleted = 0")
+    List<SysUser> getAll();
 
 }
