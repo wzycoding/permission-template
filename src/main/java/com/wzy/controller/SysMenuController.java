@@ -36,7 +36,11 @@ public class SysMenuController {
         return Result.success(menuLevelVOList);
     }
 
-
+    @GetMapping("/allMenuTree")
+    public Result allMenuTree() {
+        List<MenuLevelVO> menuLevelVOList = sysTreeService.allMenuTree();
+        return Result.success(menuLevelVOList);
+    }
 
     @Resource
     private ISysMenuService sysMenuService;

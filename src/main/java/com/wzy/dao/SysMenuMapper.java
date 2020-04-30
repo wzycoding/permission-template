@@ -87,4 +87,7 @@ public interface SysMenuMapper {
             " </foreach>" +
             "</script>")
     List<SysMenu> selectByMenuIdList(@Param("menuIdList") List<Long> menuIdList);
+
+    @Select(" select * from sys_menu where deleted = 0")
+    List<SysMenu> listAll();
 }

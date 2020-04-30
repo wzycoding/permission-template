@@ -84,6 +84,18 @@ public class SysTreeServiceImpl implements ISysTreeService {
     }
 
     @Override
+    public List<MenuLevelVO> allMenuTree() {
+        List<SysMenu> sysMenus = sysMenuMapper.listAll();
+        // 转化为VO对象
+        List<MenuLevelVO> menuLevelVOList = Lists.newArrayList();
+        for (SysMenu sysMenu : sysMenus) {
+            menuLevelVOList.add(MenuLevelVO.convert(sysMenu));
+        }
+        // 转化成菜单树
+        return userMenuToTree(menuLevelVOList);
+    }
+
+    @Override
     public List<AclGeneralVO> roleAclTree(long roleId) {
         //1、先获取系统所有权限点信息
         List<SysAcl> allAclList = sysAclMapper.listAll();
@@ -387,9 +399,6 @@ public class SysTreeServiceImpl implements ISysTreeService {
 
     @Resource
     private SysMenuMapper sysMenuMapper;
-
-    @Resource
-    private SysRoleUserMapper sysRoleUserMapper;
 
     @Resource
     private SysRoleAclMapper sysRoleAclMapper;

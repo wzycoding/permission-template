@@ -32,6 +32,12 @@ public interface ISysTreeService {
     List<MenuLevelVO> userMenuTree();
 
     /**
+     * 生成所有菜单树
+     * @return 所有菜单项组成的树
+     */
+    List<MenuLevelVO> allMenuTree();
+
+    /**
      * 根据角色id生成对应的权限树
      * @return 权限树
      */
