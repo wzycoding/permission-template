@@ -39,8 +39,20 @@ public interface ISysRoleService {
 
     /**
      * 保存角色与权限点关系
-     * @param roleId
-     * @param aclIds
+     * @param roleId 角色id
+     * @param aclIds 权限点id列表拼接字符串
      */
     void changeAcls(long roleId, String aclIds);
+
+    /**
+     * 获取权限点id集合通过角色id
+     * @return 权限点id集合
+     */
+    List<Long> getAclIdsByRoleId(long roleId);
+
+    /**
+     * 获取菜单id集合通过角色id
+     * @return 菜单id集合
+     */
+    List<Long> getMenuIdsByRoleId(long roleId);
 }

@@ -1,10 +1,7 @@
 package com.wzy.service.impl;
 
 import com.google.common.collect.Lists;
-import com.wzy.dao.SysRoleAclMapper;
-import com.wzy.dao.SysRoleMapper;
-import com.wzy.dao.SysRoleUserMapper;
-import com.wzy.dao.SysUserMapper;
+import com.wzy.dao.*;
 import com.wzy.entity.SysRole;
 import com.wzy.entity.SysUser;
 import com.wzy.param.SysRoleParam;
@@ -106,6 +103,16 @@ public class SysRoleServiceImpl implements ISysRoleService {
         sysRoleAclMapper.batchInsert(roleId, aclIdList, "admin", "127.0.0.1");
     }
 
+    @Override
+    public List<Long> getAclIdsByRoleId(long roleId) {
+        return sysRoleAclMapper.getAclIdListByRoleId(roleId);
+    }
+
+    @Override
+    public List<Long> getMenuIdsByRoleId(long roleId) {
+        return sysRoleMenuMapper.getMenuIdListByRoleId(roleId);
+    }
+
 
     @Resource
     private SysRoleMapper sysRoleMapper;
@@ -118,4 +125,7 @@ public class SysRoleServiceImpl implements ISysRoleService {
 
     @Resource
     private SysRoleAclMapper sysRoleAclMapper;
+
+    @Resource
+    private SysRoleMenuMapper sysRoleMenuMapper;
 }

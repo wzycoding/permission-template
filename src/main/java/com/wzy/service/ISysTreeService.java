@@ -1,5 +1,6 @@
 package com.wzy.service;
 
+import com.wzy.vo.AclGeneralVO;
 import com.wzy.vo.AclModuleLevelVO;
 import com.wzy.vo.DeptLevelVO;
 import com.wzy.vo.MenuLevelVO;
@@ -34,5 +35,5 @@ public interface ISysTreeService {
      * 根据角色id生成对应的权限树
      * @return 权限树
      */
-    List<AclModuleLevelVO> roleAclTree(long roleId);
+    List<AclGeneralVO> roleAclTree(long roleId);
 }

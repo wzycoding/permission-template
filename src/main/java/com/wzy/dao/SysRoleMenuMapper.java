@@ -33,4 +33,7 @@ public interface SysRoleMenuMapper {
             " </foreach>" +
             "</script>")
     List<Long> selectByRoleIdList(@Param("roleIdList") List<Long> roleIdList);
+
+    @Select(" select menu_id from sys_role_menu where role_id = #{roleId} and deleted = 0")
+    List<Long> getMenuIdListByRoleId(long roleId);
 }

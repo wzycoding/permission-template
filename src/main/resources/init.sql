@@ -52,7 +52,7 @@ CREATE TABLE `sys_acl_module` (
   `enable` int(11) NOT NULL DEFAULT '1' COMMENT '1为可用状态，0为不可用状态',
   `deleted` int(11) NOT NULL DEFAULT '0' COMMENT '0为未删除，1删除状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `sys_acl`;
 CREATE TABLE `sys_acl` (

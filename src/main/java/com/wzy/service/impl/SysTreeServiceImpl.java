@@ -10,10 +10,7 @@ import com.wzy.entity.*;
 import com.wzy.service.ISysTreeService;
 import com.wzy.service.SysCoreService;
 import com.wzy.util.LevelUtil;
-import com.wzy.vo.AclModuleLevelVO;
-import com.wzy.vo.AclVO;
-import com.wzy.vo.DeptLevelVO;
-import com.wzy.vo.MenuLevelVO;
+import com.wzy.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -87,7 +84,7 @@ public class SysTreeServiceImpl implements ISysTreeService {
     }
 
     @Override
-    public List<AclModuleLevelVO> roleAclTree(long roleId) {
+    public List<AclGeneralVO> roleAclTree(long roleId) {
         //1、先获取系统所有权限点信息
         List<SysAcl> allAclList = sysAclMapper.listAll();
 
@@ -126,7 +123,45 @@ public class SysTreeServiceImpl implements ISysTreeService {
             aclVOList.add(vo);
         }
 
-        return roleAclToTree(aclVOList);
+        List<AclModuleLevelVO> rootList = roleAclToTree(aclVOList);
+        return transformGeneralTree(rootList);
+    }
+
+    /**
+     * 转成标准树的形式
+     * @param rootList 原始树的根List
+     * @return 角色树的标准树形式
+     */
+    private List<AclGeneralVO> transformGeneralTree(List<AclModuleLevelVO> rootList) {
+        List<AclGeneralVO> voList = Lists.newArrayList();
+        for (AclModuleLevelVO vo : rootList) {
+            AclGeneralVO generalVO = new AclGeneralVO();
+            //是否是权限点
+            generalVO.setAcl(false);
+            generalVO.setLabel(vo.getLabel());
+            generalVO.setSeq(vo.getSeq());
+            generalVO.setId(vo.getId());
+            voList.add(generalVO);
+            if (vo.getAclList().size() > 0) {
+                for (AclVO aclVO : vo.getAclList()) {
+                    AclGeneralVO generalAclVO = new AclGeneralVO();
+                    generalAclVO.setAcl(true);
+                    generalAclVO.setLabel(aclVO.getName());
+                    generalAclVO.setSeq(aclVO.getSeq());
+                    generalAclVO.setId(aclVO.getId());
+                    generalAclVO.setHasAcl(!aclVO.isHasAcl());
+                    //插入到children
+                    generalVO.getChildren().add(generalAclVO);
+                    //是否被选中
+                    generalAclVO.setChecked(aclVO.isChecked());
+
+                }
+            }
+            if (vo.getChildren().size() > 0 ) {
+                generalVO.getChildren().addAll(transformGeneralTree(vo.getChildren()));
+            }
+        }
+        return voList;
     }
 
     /**
