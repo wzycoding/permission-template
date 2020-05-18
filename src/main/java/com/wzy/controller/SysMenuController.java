@@ -24,6 +24,18 @@ public class SysMenuController {
         return Result.success();
     }
 
+    @PostMapping("/delete")
+    public Result delete(@RequestParam long menuId) {
+        sysMenuService.delete(menuId);
+        return Result.success();
+    }
+
+    @PostMapping("/update")
+    public Result update(@RequestBody SysMenuParam param) {
+        sysMenuService.update(param);
+        return Result.success();
+    }
+
     @PostMapping("/roleMenu/save")
     public Result saveRoleMenu(@RequestBody SysRoleMenuParam param) {
         sysRoleMenuService.batchInsert(param);

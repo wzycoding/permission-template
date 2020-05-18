@@ -1,10 +1,8 @@
 package com.wzy.dao;
 
 import com.wzy.entity.SysMenu;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import com.wzy.param.SysMenuParam;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -90,4 +88,46 @@ public interface SysMenuMapper {
 
     @Select(" select * from sys_menu where deleted = 0")
     List<SysMenu> listAll();
+
+    @Select(" select * from sys_menu where menuId = #{menuId}")
+    SysMenu getById(long menuId);
+
+    @Update(" update sys_menu set deleted = 1 where id = #{menuId}")
+    int deleteById(long menuId);
+
+
+    @Update(" <script>" +
+            "   update sys_menu set" +
+            "   <trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">" +
+            "   <if test=\"id!=null\"> " +
+            "       id = #{id}," +
+            "   </if>" +
+            "   <if test=\"name!=null\"> " +
+            "       name = #{name}," +
+            "   </if>" +
+            "   <if test=\"url!=null\"> " +
+            "       url = #{url}," +
+            "   </if>" +
+            "   <if test=\"seq!=null\"> " +
+            "       seq = #{seq}," +
+            "   </if>" +
+            "   <if test=\"remark!=null\"> " +
+            "       remark = #{remark}," +
+            "   </if>" +
+            "   <if test=\"parentId!=null\"> " +
+            "       parent_id = #{parentId}," +
+            "   </if>" +
+            "   <if test=\"level!=null\"> " +
+            "       level = #{level}," +
+            "   </if>" +
+            "   <if test=\"operator!=null\"> " +
+            "       operator = #{operator}," +
+            "   </if>" +
+            "   <if test=\"operatorIp!=null\"> " +
+            "       operator_ip = #{operatorIp}," +
+            "   </if>" +
+            "   </trim>" +
+            "  where id = #{id}" +
+            "</script>")
+    int update(SysMenuParam param);
 }

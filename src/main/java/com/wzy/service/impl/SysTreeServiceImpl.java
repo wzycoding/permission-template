@@ -121,8 +121,8 @@ public class SysTreeServiceImpl implements ISysTreeService {
         for (SysAcl sysAcl : allAclList) {
             AclVO vo = new AclVO();
             BeanUtils.copyProperties(sysAcl, vo);
-            //非常重要的步骤！！！
-            //只有当前用户有的权限才能去给其他用户分配
+            // 非常重要的步骤！！！
+            // 只有当前用户有的权限才能去给其他用户分配
             if (userAclIdSet.contains(sysAcl.getId())) {
                 //允许分配
                 vo.setHasAcl(true);
